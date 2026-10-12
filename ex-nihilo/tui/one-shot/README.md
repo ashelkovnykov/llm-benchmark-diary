@@ -271,6 +271,36 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
         - `CreateDB()` expects schema as argument, which `createCmd` it tries to get from a `db.go` function that doesn't exist
         - `loadCmd()` doesn't handle DB names correctly
 
+#### DeepSeek V4.1 Flash
+
+**Release Date:** September 9, 2026 \
+**Time:** 1m 48s \
+**Cost:** 6 credits \
+**App Quality:** 8/10 \
+**Code Quality:** 14.5/20
+
+**Notes:**
+
+- Process:
+    - DeepSeek V4.1 Flash included a `.gitignore` file
+    - DeepSeek V4.1 Flash uses `.sqlite` extension instead of `.db`
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot (okay because DB can't be unloaded)
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Uses a constant for the `.sqlite` extension
+    - Initializes `./db/` directory before reading from / writing to it
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Embeds schema as `embed.FS` instead of `[]byte` / `string`
+    - Doesn't return DB records using a custom struct; renders them directly to `string`
+    - Identical dummy records for each DB
+    - No unit tests
+    - Code is a little more convoluted and ugly than it needs to be
+
 ### Google
 
 #### Gemini 3.1 Pro
