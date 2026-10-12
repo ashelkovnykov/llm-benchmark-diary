@@ -28,6 +28,42 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
 
 ## Results
 
+### Anthropic
+
+#### Claude Haiku 4.5
+
+**Release Date:** October 1, 2025 \
+**Time:** 12s \
+**Cost:** 12 credits \
+**App Quality:** 5/10 \
+**Code Quality:** 9.5/20
+
+**Notes:**
+
+- Process:
+    - Haiku 4.5 had follow-up questions, documented in [RESPONSE.md](./haiku-4.5/RESPONSE.md)
+    - Haiku 4.5 didn't label any of its files, just dumped them in unlabelled code blocks
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot and on new DB name validation (this is okay because DBs can't be unloaded)
+    - Only fetches DB records on DB load
+    - Initializes `./db/` directory on boot
+    - Uses `strings.Builder` for rendering
+- Cons:
+    - Doesn't embed the schema into the code
+    - Doesn't use a constant for the `.db` extension
+    - Doesn't reuse `regexp` struct
+    - Doesn't return DB records using a custom struct; renders them directly to `string`
+    - Identical dummy records for each DB
+    - No unit tests
+    - Non-idiomatic import blocks
+    - Tries to render integers to runes using ASCII match, but it doesn't work correctly at all
+        - This breaks the `tui.toString()` helper, which isn't even used in every case where it tries to do ASCII math
+    - Rendering the DB records in-place without helpers is ugly and dumb
+    - Crashes on new DB generation without these changes
+        - `Model.createInput` needs to have type `*strings.Builder{}`
+        - `Model.createInput` needs to be initialized in `NewInitialModel()`
+
 ### Google
 
 #### Gemini 3.1 Pro
