@@ -190,3 +190,28 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - `onCancel` in `dbListModel` does nothing
     - Errors returned as `string` instead of `error` during name validation
     - App does not compile without significant manual editing of output code (20+ minutes of clean-up). To the LLM's credit, though, no new code needs to be added.
+
+#### MiniMax M3
+
+**Release Date:** May 30, 2026 \
+**Time:** 3m 38s \
+**Cost:** 17 credits \
+**App Quality:** 7/10 \
+**Code Quality:** 15.5/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot and if DB fails to load (this is okay since DBs can't be unloaded)
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Initializes `./db/` directory before reading from / writing to it
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses custom `Record` struct for DB records
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Doesn't use a constant for the `.db` extension
+    - Helpers, methods, and structs all jumbled together in `tui.go`
+    - Could stand to split up `tui.go` into several files
