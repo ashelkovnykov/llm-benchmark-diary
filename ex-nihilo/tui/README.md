@@ -17,6 +17,7 @@ This experiment tasks the LLM with creating a simple TUI for browsing the conten
 | MiniMax M2.7      | ~50m        | 1m 4s        | ~51m 4s    | 4    | 6 / 10      |  6.5 / 20    |
 | MiniMax M3        | 35m         | 3m 38s       | 38m 38s    | 17   | 7 / 10      | 15.5 / 20    |
 | Kimi K2.6         | 35m         | 5m 14s       | 40m 14s    | 22   | 9 / 10      | 14   / 20    |
+| Kimi K3           | 35m         | 49s          | 35m 49s    | 20   | 7 / 10      | 16   / 20    |
 | GPT 5.6 Terra     | 35m         | 3m 8s        | 38m 8s     | 8    | 9 / 10      | 16   / 20    |
 | GPT 5.6 Terra Pro | 35m         | 2m 47s       | 37m 47s    | 10   | 10 / 10     | 15.5 / 20    |
 | GPT 5.6 Sol       | 35m         | 2m 13s       | 37m 13s    | 22   | 10 / 10     | 16   / 20    |

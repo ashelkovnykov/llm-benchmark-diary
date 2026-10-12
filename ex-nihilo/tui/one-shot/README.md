@@ -278,6 +278,35 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - `Model.close()` and `Model.closeDB()` could easily be unified
     - Could stand to split up `model.go` into several files
 
+#### Kimi K3
+
+**Release Date:** July 15, 2026 \
+**Time:** 49s \
+**Cost:** 20 credits \
+**App Quality:** 7/10 \
+**Code Quality:** 16/20
+
+**Notes:**
+
+- Process:
+    - Kimi K3 saves DBs using `.sqlite` as the extension instead of `.db`
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot (this is okay since DBs can't be unloaded)
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Initializes `./db/` directory on boot
+    - Uses a simple ASCII range scan for DB name validation
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Doesn't use a constant for the `.sqlite` extension
+    - Doesn't return DB records using a custom struct; renders them directly to `string`
+    - Identical dummy records for each DB
+    - No unit tests
+    - Has a constant for the `./db` directory in `db.go` but doesn't use it in `main.go`
+    - Could stand to split up `model.go` into several files
+
 ### OpenAI
 
 #### GPT 5.6 Terra
