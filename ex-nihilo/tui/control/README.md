@@ -2,13 +2,8 @@
 
 **Time:** ~10 hours \
 **Cost:** free \
-<<<<<<< HEAD
 **App Quality:** 6/10 \
-**Code Quality:** 7/10
-=======
-**App Quality:** 7/10 \
-**Code Quality:** 6.5/10
->>>>>>> 3c0d7be (nihilo: tui: Claude Haiku 4.5 one-shot)
+**Code Quality:** 14/20
 
 A hand-written solution for the experiment task to serve as a benchmark. More than half of the time spent writing it was spent reading the Bubble Tea documentation. Knowing what I now know about Bubble Tea, I probably wouldn't write it this way again, referring to the nested `tea.Model` interface pattern I used. The fact that `Model.Update()` returns a `tea.Model` made me assume that passing structs implementing that interface back and forth was the intended design choice, but I was apparently mistaken and several issues made this a rather annoying process:
 1. Bubble Tea doesn't provide any direct method for defining parent or sibling relationships between `tea.Model`s. It also doesn't have any way of registering multiple `tea.Model`s with the `tea.Program`. This means boilerplate in each struct that extends `tea.Model` to manually manage these relationships.

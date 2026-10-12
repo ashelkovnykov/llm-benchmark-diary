@@ -1,4 +1,4 @@
-## Prompt
+# Prompt
 
 The following prompt was used for all of the models. It took ~35 minutes to write & edit.
 
@@ -26,11 +26,11 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
 >
 > Be concise. You don't need to explain what you're doing or why you're doing it. I just need the source files for the project. If I have a question about something, I'll ask you myself. If I have an adjustment that I want you to make, I'll let you know. Ask clarifying questions before writing anything if you think that something is ambiguous / underspecified. If you have suggestions to make, list them _after_ providing the initial output as requested.
 
-## Results
+# Results
 
-### Alibaba
+## Alibaba
 
-#### Qwen 3.7 Plus
+### Qwen 3.7 Plus
 
 **Release Date:** June 2, 2026 \
 **Time:** 2m 10s \
@@ -59,7 +59,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Non-idiomatic import blocks
     - Some repetition in the update helpers that could be removed by using existing Bubble Tea bubbles or rewriting `Model.Update()`
 
-#### Qwen 3.7 Max
+### Qwen 3.7 Max
 
 **Release Date:** May 20, 2026 \
 **Time:** 1m 29s \
@@ -87,7 +87,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Non-idiomatic import blocks
     - `os.IsNotExist` in `ListDBs` should be fatal, since `EnsureDBDir` should have been called by then
 
-#### Qwen 3.8 Flash
+### Qwen 3.8 Flash
 
 **Release Date:** August 25, 2026 \
 **Time:** 13m 45s \
@@ -118,7 +118,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Loading the DB directory as an envvar is unnecessary given the project description, and more likely to cause bugs in the future
     - Needlessly complicated spaghetti helper logic in `tui.go`
 
-#### Qwen 3.8 Max
+### Qwen 3.8 Max
 
 **Release Date:** August 2, 2026 \
 **Time:** 1m 39s \
@@ -144,9 +144,9 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Identical dummy records for each DB
     - No unit tests
 
-### Anthropic
+## Anthropic
 
-#### Claude Haiku 4.5
+### Claude Haiku 4.5
 
 **Release Date:** October 1, 2025 \
 **Time:** 12s \
@@ -180,7 +180,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
         - `Model.createInput` needs to have type `*strings.Builder{}`
         - `Model.createInput` needs to be initialized in `NewInitialModel()`
 
-#### Claude Opus 4.8
+### Claude Opus 4.8
 
 **Release Date:** May 27, 2026 \
 **Time:** 37s \
@@ -209,7 +209,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Mixes value and pointer receivers
     - Could stand to split up `tui.go` into several files
 
-#### Claude Fable 5.1
+### Claude Fable 5.1
 
 **Release Date:** August 31, 2026 \
 **Time:** 1m 7s \
@@ -236,7 +236,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Mixes value and pointer receivers
     - Could stand to split up `model.go` into several files
 
-#### Claude Haiku 5.5
+### Claude Haiku 5.5
 
 **Release Date:** October 7, 2026 \
 **Time:** 45s \
@@ -262,7 +262,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - No unit tests
     - Sorting DB files by name is unnecessary, since the OS will already return them in alphabetical order
 
-#### Claude Sonnet 5.5
+### Claude Sonnet 5.5
 
 **Release Date:** September 28, 2026 \
 **Time:** 43s \
@@ -290,7 +290,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Identical dummy records for each DB
     - No unit tests
 
-#### Claude Opus 5.5
+### Claude Opus 5.5
 
 **Release Date:** September 22, 2026 \
 **Time:** 1m 21s \
@@ -316,9 +316,9 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Identical dummy records for each DB
     - No unit tests
 
-### DeepSeek
+## DeepSeek
 
-#### DeepSeek V4 Pro
+### DeepSeek V4 Pro
 
 **Release Date:** August 13, 2026 \
 **Time:** 3m 12s + ~3m fixing bugs \
@@ -351,7 +351,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
         - `CreateDB()` expects schema as argument, which `createCmd` it tries to get from a `db.go` function that doesn't exist
         - `loadCmd()` doesn't handle DB names correctly
 
-#### DeepSeek V4.1 Flash
+### DeepSeek V4.1 Flash
 
 **Release Date:** September 9, 2026 \
 **Time:** 1m 48s \
@@ -381,9 +381,9 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - No unit tests
     - Code is a little more convoluted and ugly than it needs to be
 
-### Google
+## Google
 
-#### Gemini 3.1 Pro
+### Gemini 3.1 Pro
 
 **Release Date:** December 31, 2024 \
 **Time:** 34s \
@@ -409,7 +409,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - No unit tests
     - Non-idiomatic import blocks
 
-#### Gemini 3.8 Flash
+### Gemini 3.8 Flash
 
 **Release Date:** September 1, 2026 \
 **Time:** 25s \
@@ -436,9 +436,9 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Non-idiomatic import blocks
     - Mixes value and pointer receivers
 
-### Meta AI
+## Meta AI
 
-#### Muse Spark 1.2
+### Muse Spark 1.2
 
 **Release Date:** August 4, 2026 \
 **Time:** 18s \
@@ -468,9 +468,9 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Code would be a little nicer with helpers in `model.go`
     - `schema.sql` has a typo (`name TEXT NOT NOT NULL`) that prevents new DBs from being initialized
 
-### MiniMax
+## MiniMax
 
-#### MiniMax M2.7
+### MiniMax M2.7
 
 **Release Date:** March 17, 2026 \
 **Time:** 1m 4s + ~15m \
@@ -508,7 +508,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Errors returned as `string` instead of `error` during name validation
     - App does not compile without significant manual editing of output code (20+ minutes of clean-up). To the LLM's credit, though, no new code needs to be added.
 
-#### MiniMax M3
+### MiniMax M3
 
 **Release Date:** May 30, 2026 \
 **Time:** 3m 38s \
@@ -530,12 +530,14 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Compiles without error
 - Cons:
     - Doesn't use a constant for the `.db` extension
+    - Identical dummy records for each DB
+    - No unit tests
     - Helpers, methods, and structs all jumbled together in `tui.go`
     - Could stand to split up `tui.go` into several files
 
-### Moonshot AI
+## Moonshot AI
 
-#### Kimi K2.6
+### Kimi K2.6
 
 **Release Date:** April 20, 2026 \
 **Time:** 5m 14s \
@@ -566,7 +568,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - `Model.close()` and `Model.closeDB()` could easily be unified
     - Could stand to split up `model.go` into several files
 
-#### Kimi K3
+### Kimi K3
 
 **Release Date:** July 15, 2026 \
 **Time:** 49s \
@@ -595,9 +597,9 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Has a constant for the `./db` directory in `db.go` but doesn't use it in `main.go`
     - Could stand to split up `model.go` into several files
 
-### OpenAI
+## OpenAI
 
-#### GPT 5.6 Terra
+### GPT 5.6 Terra
 
 **Release Date:** July 8, 2026 \
 **Time:** 3m 8s \
@@ -628,13 +630,13 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - `item` struct having an `isNew` field is inefficient; should be index-based
     - `Model.Update()` logic repeats logic for `tea.KeyMsg`
 
-#### GPT 5.6 Terra Pro
+### GPT 5.6 Terra Pro
 
 **Release Date:** July 8, 2026 \
 **Time:** 2m 47s \
 **Cost:** 10 credits \
 **App Quality:** 10/10 \
-**Code Quality:** 15.5/16
+**Code Quality:** 15.5/20
 
 **Notes:**
 
@@ -662,7 +664,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
         - `dbLoadedMsg` + `loadCmd`
         - `dbCreatedMsg` + `createCmd`
 
-#### GPT 5.6 Sol
+### GPT 5.6 Sol
 
 **Release Date:** July 8, 2026 \
 **Time:** 2m 13s \
@@ -691,7 +693,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - No unit tests
     - Could stand to split up `app.go` into several files
 
-#### GPT 5.6 Sol Pro
+### GPT 5.6 Sol Pro
 
 **Release Date:** July 8, 2026 \
 **Time:** 1m 58s \
@@ -719,7 +721,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Some repetition in the update helpers that could be removed by using existing Bubble Tea bubbles or rewriting `Model.Update()`
     - Could stand to split up `tui.go` into several files
 
-#### GPT 6 Luna
+### GPT 6 Luna
 
 **Release Date:** September 22, 2026 \
 **Time:** 22s \
@@ -746,11 +748,11 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Identical dummy records for each DB
     - No unit tests
 
-#### GPT 6 Astra
+### GPT 6 Astra
 
 **Release Date:** September 3, 2026 \
 **Time:** 45s \
-**Cost:** 82 credits \
+**Cost:** 85 credits \
 **App Quality:** 9/10 \
 **Code Quality:** 15/20
 
@@ -778,7 +780,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - No independent name validation helper
     - It goes through a whole unnecessary rigamarole just to open a local sqlite DB
 
-#### GPT 6.1 Sol
+### GPT 6.1 Sol
 
 **Release Date:** September 29, 2026 \
 **Time:** 42s \
@@ -810,9 +812,9 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Could stand to split `Create()` with helpers
     - Could stand to split `Update()` with helpers
 
-### xAI
+## xAI
 
-#### Grok 4.7 Fast
+### Grok 4.7 Fast
 
 **Release Date:** September 21, 2026 \
 **Time:** 2m 6s \
@@ -842,7 +844,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
         - What's the point of hardcoding the schema columns for seed data but making the schema configurable for the function?
     - `model.Update()` could be rewritten to avoid repetition in the helpers
 
-#### Grok 4.7 Expert
+### Grok 4.7 Expert
 
 **Release Date:** September 21, 2026 \
 **Time:** 3m 25s \
@@ -859,22 +861,22 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Only fetches the contents of `./db/` on boot and after creating a new DB
     - Only fetches DB records on DB load
     - Embeds schema into code
-    - Doesn't use a constant for the `.db` extension
     - Initializes `./db/` directory before reading from / writing to it
     - Reuses a single `regexp` struct for new DB name validation
     - Compiles without error
     - Uses custom `Record` struct for DB records
 - Cons:
     - Embeds schema as `embed.FS` instead of `[]byte` / `string`
-    - Identical dummy records for each DB
+    - Doesn't use a constant for the `.db` extension
     - Doesn't use a `strings.Builder` for rendering
+    - Identical dummy records for each DB
     - No unit tests
     - Non-idiomatic import blocks
     - `model.Update()` could be rewritten to avoid repetition in the helpers
 
-### Xiaomi
+## Xiaomi
 
-#### MiMo V2.6 Flash
+### MiMo V2.6 Flash
 
 **Release Date:** September 21, 2026 \
 **Time:** 3m 19s + ~1m debugging \
@@ -902,7 +904,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
         - Both struct and function ambiguously named `Preview`
         - `main.go` tries to run `ui.New()` instead of passing it to `tea.NewProgram()`
 
-#### MiMo V2.6 Pro
+### MiMo V2.6 Pro
 
 **Release Date:** September 21, 2026 \
 **Time:** 7m 58s + ~1m debugging \
@@ -933,9 +935,9 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
         - Missing `lipgloss` package import in `viewer.go`
         - Unused `bubbles/textinput` package import in `create.go`
 
-### Z AI
+## Z AI
 
-#### GLM 5.3
+### GLM 5.3
 
 **Release Date:** July 17, 2026 \
 **Time:** DNF \
@@ -947,7 +949,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
 
 - Multiple attempts failed to produce an answer. The model would spin for 5+ minutes before either failing or producing 2/3 files and _then_ failing.
 
-#### GLM 5.3 Flash
+### GLM 5.3 Flash
 
 **Release Date:** August 25, 2026 \
 **Time:** 11s \
