@@ -752,6 +752,37 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - No independent name validation helper
     - It goes through a whole unnecessary rigamarole just to open a local sqlite DB
 
+#### GPT 6.1 Sol
+
+**Release Date:** September 29, 2026 \
+**Time:** 42s \
+**Cost:** 17 credits \
+**App Quality:** 8/10 \
+**Code Quality:** 14.5/20
+
+**Notes:**
+
+- Process:
+    - GPT 6.1 Sol included a `.gitignore` file
+    - GPT 6.1 Sol uses `.sqlite` extension instead of `.db`
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot, before navigating to the DB selection screen, and on demand
+    - Only fetches DB records on DB load and on demand
+    - Embeds schema into code
+    - Uses a constant for the `.sqlite` extension
+    - Initializes `./db/` directory before reading from / writing to it
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses custom `Preview` struct for returning fetched DB records
+    - Uses `strings.Builder` for rendering, with extra efficient writes
+    - Compiles without error
+- Cons:
+    - `Preview` struct holds record values as rendered `string`s
+    - Identical dummy records for each DB
+    - No unit tests
+    - System of rejecting any Bubble Tea messages other than `tea.KeyMsg` is restrictive
+    - Could stand to split `Create()` with helpers
+    - Could stand to split `Update()` with helpers
 
 ### Xiaomi
 
