@@ -701,6 +701,37 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
         - Both struct and function ambiguously named `Preview`
         - `main.go` tries to run `ui.New()` instead of passing it to `tea.NewProgram()`
 
+#### MiMo V2.6 Pro
+
+**Release Date:** September 21, 2026 \
+**Time:** 7m 58s + ~1m debugging \
+**Cost:** 9 credits \
+**App Quality:** 9/10 \
+**Code Quality:** 13/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot and after creating a new DB
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Uses a constant for the `.db` extension
+    - Initializes `./db/` directory before reading from /writing to it
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses a custom `Table` struct for DB summary
+    - Uses `strings.Builder` for rendering
+    - Generic seed data generation code
+- Cons:
+    - Embeds schema as `embed.FS` instead of `[]byte` / `string`
+    - `Table` struct holds record values as rendered `string`s
+    - Identical dummy records for each DB
+    - No unit tests
+    - Compile errors
+        - `bubbletea` package version doesn't exist causing build failure
+        - Missing `lipgloss` package import in `viewer.go`
+        - Unused `bubbles/textinput` package import in `create.go`
+
 ### Z AI
 
 #### GLM 5.3
