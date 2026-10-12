@@ -245,6 +245,39 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Helpers, methods, and structs all jumbled together in `tui.go`
     - Could stand to split up `tui.go` into several files
 
+### Moonshot AI
+
+#### Kimi K2.6
+
+**Release Date:** April 20, 2026 \
+**Time:** 5m 14s \
+**Cost:** 22 credits \
+**App Quality:** 9/10 \
+**Code Quality:** 14/20
+
+**Notes:**
+
+- Process:
+    - Kimi K2.6 had follow-up questions, documented in [RESPONSE.md](./kimi-k2.6/RESPONSE.md)
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot and before navigating to the DB selection screen
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Initializes `./db/` directory on boot and before writing to it
+    - Uses custom `Record` struct for DB records
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Embeds schema as `embed.FS` instead of `[]byte` / `string`
+    - Doesn't use a constant for the `.db` extension
+    - Doesn't reuse `regexp` struct
+    - Identical dummy records for each DB
+    - No unit tests
+    - Non-idiomatic import blocks
+    - `Model.close()` and `Model.closeDB()` could easily be unified
+    - Could stand to split up `model.go` into several files
+
 ### OpenAI
 
 #### GPT 5.6 Terra
