@@ -178,6 +178,41 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Mixes value and pointer receivers
     - Could stand to split up `tui.go` into several files
 
+### DeepSeek
+
+#### DeepSeek V4 Pro
+
+**Release Date:** August 13, 2026 \
+**Time:** 3m 12s + ~3m fixing bugs \
+**Cost:** 8 credits \
+**App Quality:** 9/10 \
+**Code Quality:** 9.5/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot and before navigating to the DB selection screen
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Initializes `./db/` directory on boot
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses `strings.Builder` for rendering
+- Cons:
+    - Doesn't use a constant for the `.db` extension
+    - Doesn't return DB records using a custom struct; renders them directly to `string`
+    - Identical dummy records for each DB
+    - No unit tests
+    - Non-idiomatic import blocks
+    - Adding more seed data requires changing the code, since it's hardcoded to have 15 dummy `string`s
+    - Compilation errors:
+        - unused `path/filepath` import in `main.go`
+        - unused `path/filepath` import in `db.go`
+        - missing `bubbles/textinput` import in `update.go`
+        - missing `lipgloss` import in `model.go`
+        - `CreateDB()` expects schema as argument, which `createCmd` it tries to get from a `db.go` function that doesn't exist
+        - `loadCmd()` doesn't handle DB names correctly
+
 ### Google
 
 #### Gemini 3.1 Pro
