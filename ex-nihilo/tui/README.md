@@ -30,6 +30,7 @@ This experiment tasks the LLM with creating a simple TUI for browsing the conten
 | GPT 5.6 Terra Pro   |  35m        |  2m 47s      | 37m 47s    |  10  | 10 / 10     | 15.5 / 20    |
 | GPT 5.6 Sol         |  35m        |  2m 13s      | 37m 13s    |  22  | 10 / 10     | 16   / 20    |
 | GPT 5.6 Sol Pro     |  35m        |  1m 58s      | 36m 58s    |  28  |  9 / 10     | 15.5 / 20    |
+| GPT 6 Luna          |  35m        |     22s      | 35m 22s    |   2  |  7 / 10     | 14.5 / 20    |
 | GPT 6 Astra         |  35m        |     45s      | 35m 45s    |  85  |  9 / 10     | 15   / 20    |
 | MiMo V2.6 Flash     | ~36m        |  3m 19s      | 39m 19s    |   3  |  9 / 10     | 13   / 20    |
 | MiMo V2.6 Pro       | ~36m        |  7m 58s      | 43m 58s    |   9  |  9 / 10     | 13   / 20    |

@@ -665,6 +665,33 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Some repetition in the update helpers that could be removed by using existing Bubble Tea bubbles or rewriting `Model.Update()`
     - Could stand to split up `tui.go` into several files
 
+#### GPT 6 Luna
+
+**Release Date:** September 22, 2026 \
+**Time:** 22s \
+**Cost:** 2 credits \
+**App Quality:** 7/10 \
+**Code Quality:** 14.5/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Initializes `./db/` directory on boot
+    - Uses a simple ASCII range scan for DB name validation
+    - Uses `strings.Builder` for rendering, with extra efficient writes
+    - Compiles without error
+- Cons:
+    - Only fetching `./db/` contents on boot is an issue because DBs can be unloaded
+    - Embeds schema as `embed.FS` instead of `[]byte` / `string`
+    - Doesn't use a constant for the `.db` extension
+    - Doesn't return DB records using a custom struct; renders them directly to `string`
+    - Identical dummy records for each DB
+    - No unit tests
+
 #### GPT 6 Astra
 
 **Release Date:** September 3, 2026 \
@@ -696,6 +723,7 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - `Makefile` paramaterization could be better and not sure why it calls `gofmt` instead of `go fmt`
     - No independent name validation helper
     - It goes through a whole unnecessary rigamarole just to open a local sqlite DB
+
 
 ### Xiaomi
 
