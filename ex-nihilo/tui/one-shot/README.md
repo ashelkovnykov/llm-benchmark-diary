@@ -554,3 +554,42 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - No unit tests
     - Some repetition in the update helpers that could be removed by using existing Bubble Tea bubbles or rewriting `Model.Update()`
     - Could stand to split up `tui.go` into several files
+
+### Z AI
+
+#### GLM 5.3
+
+**Release Date:** July 17, 2026 \
+**Time:** DNF \
+**Cost:** N/A \
+**App Quality:** N/A \
+**Code Quality:** N/A
+
+**Notes:**
+
+- Multiple attempts failed to produce an answer. The model would spin for 5+ minutes before either failing or producing 2/3 files and _then_ failing.
+
+#### GLM 5.3 Flash
+
+**Release Date:** August 25, 2026 \
+**Time:** 11s \
+**Cost:** 1 credit \
+**App Quality:** 8/10 \
+**Code Quality:** 13/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot (this is okay because DBs can't be unloaded)
+    - Initializes `./db/` directory on boot
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses custom `Record` struct for DB records
+    - Compiles without error
+- Cons:
+    - Fetches DB records on screen rerender
+    - Does not embed schema into code
+    - Doesn't use a constant for the `.db` extension
+    - Doesn't use a `strings.Builder` for rendering
+    - Identical dummy records for each DB
+    - No unit tests
