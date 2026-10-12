@@ -671,6 +671,36 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - No independent name validation helper
     - It goes through a whole unnecessary rigamarole just to open a local sqlite DB
 
+### Xiaomi
+
+#### MiMo V2.6 Flash
+
+**Release Date:** September 21, 2026 \
+**Time:** 3m 19s + ~1m debugging \
+**Cost:** 3 credits \
+**App Quality:** 9/10 \
+**Code Quality:** 13/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot, before navigating to the DB selection screen, and after creating a new DB
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Uses a constant for the `.db` extension
+    - Initializes `./db/` directory before writing to it
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses `strings.Builder` for rendering
+- Cons:
+    - Embeds schema as `embed.FS` instead of `[]byte` / `string`
+    - Doesn't return DB records using a custom struct; renders them directly to `string`
+    - Identical dummy records for each DB
+    - No unit tests
+    - Compile errors
+        - Both struct and function ambiguously named `Preview`
+        - `main.go` tries to run `ui.New()` instead of passing it to `tea.NewProgram()`
+
 ### Z AI
 
 #### GLM 5.3
