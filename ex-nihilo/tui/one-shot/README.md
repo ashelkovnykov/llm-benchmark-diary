@@ -244,3 +244,34 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Doesn't use a constant for the `.db` extension
     - Helpers, methods, and structs all jumbled together in `tui.go`
     - Could stand to split up `tui.go` into several files
+
+### OpenAI
+
+#### GPT 5.6 Sol
+
+**Release Date:** July 8, 2026 \
+**Time:** 2m 13s \
+**Cost:** 22 credits \
+**App Quality:** 10/10 \
+**Code Quality:** 16/20
+
+**Notes:**
+
+- Process:
+    - GPT 5.6 Sol included a `.gitignore` file
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot and before reading from / writing to it
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Uses a constant for the `.db` extension
+    - Initializes `./db/` directory on boot and before reading from / writing to it
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Embeds schema as `embed.FS` instead of `[]byte` / `string`
+    - Doesn't return DB records using a custom struct; renders them directly to `string`
+    - Identical dummy records for each DB
+    - No unit tests
+    - Could stand to split up `app.go` into several files
