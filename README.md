@@ -8,4 +8,7 @@ Since 2023, I've naturally ossified into my preferred LLM workflow without ever 
 
 ## Table of Contents
 
-TODO
+- **[ex-nihilo/](./ex-nihilo/README.md)**: Experiments that involve code generation from scratch with no existing codebase
+  - **[tui/](./ex-nihilo/tui/README.md)**: TUI DB explorer experiment
+    - **[control/](./ex-nihilo/tui/control)**: 100% hand-written solution, comparison purposes
+    - **[one-shot/](./ex-nihilo/tui/one-shot)**: The LLM is directly asked for a solution using a master prompt; no user feedback, follow-up prompts, debug cycles, or iterative corrections
