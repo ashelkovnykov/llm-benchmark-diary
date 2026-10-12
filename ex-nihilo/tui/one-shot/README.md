@@ -180,6 +180,34 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
         - `Model.createInput` needs to have type `*strings.Builder{}`
         - `Model.createInput` needs to be initialized in `NewInitialModel()`
 
+#### Claude Sonnet 5.5
+
+**Release Date:** September 28, 2026 \
+**Time:** 43s \
+**Cost:** 39 credits \
+**App Quality:** 9/10 \
+**Code Quality:** 15/20
+
+**Notes:**
+
+- Process:
+    - Claude Sonnet 5.5 included a `.gitignore` file
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot, before navigating to the DB selection screen, and as part of validating new DB names
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Uses a constant for the `.db` extension
+    - Initializes `./db/` directory before writing new DB
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses a custom `Snapshot` struct for DB summary
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - `Snapshot` struct holds records as rendered `strings`
+    - Identical dummy records for each DB
+    - No unit tests
+
 #### Claude Opus 4.8
 
 **Release Date:** May 27, 2026 \

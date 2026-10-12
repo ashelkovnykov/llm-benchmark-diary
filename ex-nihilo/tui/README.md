@@ -14,6 +14,7 @@ This experiment tasks the LLM with creating a simple TUI for browsing the conten
 | Qwen 3.8 Flash      |  35m        | 13m 45s      | 48m 45s    |  11  |  8 / 10     | 13.5 / 20    |
 | Qwen 3.8 Max        |  35m        |  1m 39s      | 36m 39s    |  15  |  7 / 10     | 15   / 20    |
 | Claude Haiku 4.5    | ~37m        |     12s      | 37m 12s    |  12  |  5 / 10     |  9.5 / 20    |
+| Claude Sonnet 5.5   |  35m        |     43s      | 35m 43s    |  39  |  9 / 10     | 15   / 20    |
 | Claude Opus 4.8     |  35m        |     37s      | 35m 37s    |  66  |  8 / 10     | 14   / 20    |
 | Claude Opus 5.5     |  35m        |  1m 21s      | 36m 21s    | 106  | 10 / 10     | 16   / 20    |
 | Claude Fable 5.1    |  35m        |  1m  7s      | 36m  7s    | 182  |  9 / 10     | 15.5 / 20    |
