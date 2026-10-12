@@ -15,6 +15,7 @@ This experiment tasks the LLM with creating a simple TUI for browsing the conten
 | Claude Haiku 4.5  | ~37m        | 12s          | 37m 12s    | 12   | 5 / 10      |  9.5 / 20    |
 | Claude Opus 4.8   | 35m         | 37s          | 35m 37s    | 66   | 8 / 10      | 14   / 20    |
 | Gemini 3.1 Pro    | 35m         | 34s          | 35m 34s    | 18   | 8 / 10      | 12.5 / 20    |
+| Muse Spark 1.2    | 35m         | 18s          | 35m 18s    | 8    | 4 / 10      | 12   / 20    |
 | MiniMax M2.7      | ~50m        | 1m 4s        | ~51m 4s    | 4    | 6 / 10      |  6.5 / 20    |
 | MiniMax M3        | 35m         | 3m 38s       | 38m 38s    | 17   | 7 / 10      | 15.5 / 20    |
 | Kimi K2.6         | 35m         | 5m 14s       | 40m 14s    | 22   | 9 / 10      | 14   / 20    |

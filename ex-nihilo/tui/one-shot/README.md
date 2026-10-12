@@ -206,6 +206,38 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - No unit tests
     - Non-idiomatic import blocks
 
+### Meta AI
+
+#### Muse Spark 1.2
+
+**Release Date:** August 4, 2026 \
+**Time:** 18s \
+**Cost:** 8 credits \
+**App Quality:** 4/10 \
+**Code Quality:** 12/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot (this is okay because DBs can't be unloaded)
+    - Only fetches DB records on DB load
+    - Initializes `./db/` directory on boot and before reading from / writing to it
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses a custom `Stats` struct for DB summary
+    - Uses `strings.Builder` for rendering
+    - Handles multiple DB file extensions
+    - Compiles without error
+- Cons:
+    - Does not embed schema into code
+    - Doesn't use a constant for the `.db` extension
+    - `Stats` struct holds record values as rendered `string`
+    - Identical dummy records for each DB
+    - No unit tests
+    - Non-idiomatic import blocks
+    - Code would be a little nicer with helpers in `model.go`
+    - `schema.sql` has a typo (`name TEXT NOT NOT NULL`) that prevents new DBs from being initialized
+
 ### MiniMax
 
 #### MiniMax M2.7
