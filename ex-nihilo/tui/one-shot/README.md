@@ -209,6 +209,33 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Mixes value and pointer receivers
     - Could stand to split up `tui.go` into several files
 
+#### Claude Fable 5.1
+
+**Release Date:** August 31, 2026 \
+**Time:** 1m 7s \
+**Cost:** 182 credits \
+**App Quality:** 9/10 \
+**Code Quality:** 15.5/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot, before navigating to the DB selection screen, and before & after writing to it
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Uses a constant for the `.db` extension
+    - Initializes `./db/` directory on boot
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Doesn't return DB records using a custom struct; renders them directly to `string`
+    - Identical dummy records for each DB
+    - No unit tests
+    - Mixes value and pointer receivers
+    - Could stand to split up `model.go` into several files
+
 ### DeepSeek
 
 #### DeepSeek V4 Pro
