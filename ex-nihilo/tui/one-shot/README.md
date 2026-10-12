@@ -299,6 +299,33 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - No unit tests
     - Non-idiomatic import blocks
 
+#### Gemini 3.8 Flash
+
+**Release Date:** September 1, 2026 \
+**Time:** 25s \
+**Cost:** 9 credits \
+**App Quality:** 10/10 \
+**Code Quality:** 15/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot, before navigating to the DB selection screen, and after writing to it
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Initializes `./db/` directory on boot and before reading from it
+    - Uses a custom `Record` struct for returning fetched DB records
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Doesn't use a constant for the `.db` extension
+    - Doesn't reuse a single `regexp` struct during DB name validation
+    - Identical dummy records for each DB
+    - No unit tests
+    - Non-idiomatic import blocks
+    - Mixes value and pointer receivers
+
 ### Meta AI
 
 #### Muse Spark 1.2
