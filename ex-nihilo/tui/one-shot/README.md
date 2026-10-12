@@ -25,3 +25,33 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
 > In addition, I expect `./internal/` to contain helper files which define the core logic for the project, in one or more modules.
 >
 > Be concise. You don't need to explain what you're doing or why you're doing it. I just need the source files for the project. If I have a question about something, I'll ask you myself. If I have an adjustment that I want you to make, I'll let you know. Ask clarifying questions before writing anything if you think that something is ambiguous / underspecified. If you have suggestions to make, list them _after_ providing the initial output as requested.
+
+## Results
+
+### Google
+
+#### Gemini 3.1 Pro
+
+**Release Date:** December 31, 2024 \
+**Time:** 34s \
+**Cost:** 18 credits \
+**App Quality:** 8/10 \
+**Code Quality:** 12.5/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot and before navigating to the DB selection screen
+    - Only fetches DB records on DB load
+    - Uses a custom `Record` struct for returning fetched DB records
+    - Compiles without error
+- Cons:
+    - Doesn't embed the schema into the code
+    - Doesn't reuse `regexp` struct for name validation
+    - Doesn't use a `strings.Builder` for rendering
+    - Doesn't use a constant for the `.db` extension
+    - `./db/` directory management is all over the place: `Makefile`, `main.go`, `db.go`
+    - Identical dummy records for each DB
+    - No unit tests
+    - Non-idiomatic import blocks

@@ -2,3 +2,4 @@
 **/bin
 
 ex-nihilo/tui/control/db/*
+ex-nihilo/tui/one-shot/*/db/*.db
