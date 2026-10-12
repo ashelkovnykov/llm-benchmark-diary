@@ -842,6 +842,36 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
         - What's the point of hardcoding the schema columns for seed data but making the schema configurable for the function?
     - `model.Update()` could be rewritten to avoid repetition in the helpers
 
+#### Grok 4.7 Expert
+
+**Release Date:** September 21, 2026 \
+**Time:** 3m 25s \
+**Cost:** ?? \
+**App Quality:** 9/10 \
+**Code Quality:** 14.5/20
+
+**Notes:**
+
+- Process:
+    - Unlike the other models, Grok was accessed through the xAI interface, which does not expose the total number of tokens used. Even if it did, it would be difficult to weight them against the cost of the query in credits from the inference reseller used.
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot and after creating a new DB
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Doesn't use a constant for the `.db` extension
+    - Initializes `./db/` directory before reading from / writing to it
+    - Reuses a single `regexp` struct for new DB name validation
+    - Compiles without error
+    - Uses custom `Record` struct for DB records
+- Cons:
+    - Embeds schema as `embed.FS` instead of `[]byte` / `string`
+    - Identical dummy records for each DB
+    - Doesn't use a `strings.Builder` for rendering
+    - No unit tests
+    - Non-idiomatic import blocks
+    - `model.Update()` could be rewritten to avoid repetition in the helpers
+
 ### Xiaomi
 
 #### MiMo V2.6 Flash
