@@ -87,6 +87,37 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Non-idiomatic import blocks
     - `os.IsNotExist` in `ListDBs` should be fatal, since `EnsureDBDir` should have been called by then
 
+#### Qwen 3.8 Flash
+
+**Release Date:** August 25, 2026 \
+**Time:** 13m 45s \
+**Cost:** 11 credits \
+**App Quality:** 8/10 \
+**Code Quality:** 13.5/20
+
+**Notes:**
+
+- Process:
+    - I wouldn't describe 14m response time as very "flash"
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot and before navigating to the DB selection screen
+    - Only fetches DB records on DB load and on demand
+    - Embeds schema into code
+    - Initializes `./db/` directory on boot and before reading from / writing to it
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses custom `Preview` struct for returning fetched DB records
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Doesn't use a constant for the `.db` extension
+    - `Preview` struct holds record values as rendered `string`s
+    - Identical dummy records for each DB
+    - No unit tests
+    - Parameterization in `Makefile` needs improvement
+    - Loading the DB directory as an envvar is unnecessary given the project description, and more likely to cause bugs in the future
+    - Needlessly complicated spaghetti helper logic in `tui.go`
+
 #### Qwen 3.8 Max
 
 **Release Date:** August 2, 2026 \
