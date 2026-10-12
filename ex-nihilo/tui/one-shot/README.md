@@ -91,3 +91,43 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Identical dummy records for each DB
     - No unit tests
     - Non-idiomatic import blocks
+
+### MiniMax
+
+#### MiniMax M2.7
+
+**Release Date:** March 17, 2026 \
+**Time:** 1m 4s + ~15m \
+**Cost:** 4 credits \
+**App Quality:** 6/10 \
+**Code Quality:** 6.5/20
+
+**Notes:**
+
+- Process:
+    - MiniMax M2.7 didn't label any of its files, just dumped them in unlabelled code blocks
+    - MiniMax M2.7 seemed to get very confused, generating multiple copies of some files:
+        - 3 versions of the `main` function
+        - 3 versions of the `New` function
+        - 2 versions of `dbListModel` and methods
+        - 5 versions of `dbViewModel` and methods
+- Pros:
+    - Only fetches the contents of `./db/` on boot and on new DB name validation (this is okay because DBs can't be unloaded)
+    - Only fetches DB records on DB load
+    - Uses a simple ASCII range scan for DB name validation
+    - Uses a custom `Record` struct for returning fetched DB records
+    - Initializes `./db/` directory before writing new DB
+- Cons:
+    - `schema.sql` is unused; instead, the schema is hard-coded into `schema.go`
+    - Doesn't use a constant for the `.db` extension
+    - Doesn't use a `strings.Builder` for rendering
+    - Identical dummy records for each DB
+    - No unit tests
+    - Uses an odd two-phase "load-then-view" solution in `main.go` that's difficult to extend without rewrites
+    - Non-idiomatic import blocks
+    - `models.go` is broken and unused
+    - `input.go` is unused
+    - `dbListModel.Update()` is needlessly over complicated and contains a bug that prevents backspace from being used when entering in a new DB name
+    - `onCancel` in `dbListModel` does nothing
+    - Errors returned as `string` instead of `error` during name validation
+    - App does not compile without significant manual editing of output code (20+ minutes of clean-up). To the LLM's credit, though, no new code needs to be added.
