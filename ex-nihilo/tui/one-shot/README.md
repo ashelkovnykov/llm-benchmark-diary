@@ -30,6 +30,35 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
 
 ### Alibaba
 
+#### Qwen 3.7 Plus
+
+**Release Date:** June 2, 2026 \
+**Time:** 2m 10s \
+**Cost:** 5 credits \
+**App Quality:** 7/10 \
+**Code Quality:** 15.5/20
+
+**Notes:**
+
+- Process:
+    - Qwen 3.7 Plus didn't label any of its files, just dumped them in unlabelled code blocks
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot (this is okay because DBs can't be unloaded)
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Initializes `./db/` directory on boot
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses custom `Record` struct for DB records
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Doesn't use a constant for the `.db` extension
+    - Identical dummy records for each DB
+    - No unit tests
+    - Non-idiomatic import blocks
+    - Some repetition in the update helpers that could be removed by using existing Bubble Tea bubbles or rewriting `Model.Update()`
+
 #### Qwen 3.7 Max
 
 **Release Date:** May 20, 2026 \

@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS records (
+    rowid INTEGER PRIMARY KEY AUTOINCREMENT,
+    value TEXT
+);
