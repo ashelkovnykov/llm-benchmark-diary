@@ -28,6 +28,36 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
 
 ## Results
 
+### Alibaba
+
+#### Qwen 3.7 Max
+
+**Release Date:** May 20, 2026 \
+**Time:** 1m 29s \
+**Cost:** 26 credits \
+**App Quality:** 9/10 \
+**Code Quality:** 15/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot, and appends any new DBs created
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Initializes `./db/` directory on boot and before writing new DB
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses a custom `Record` struct for returning fetched DB records
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Schema embedded as `embed.FS` instead of `[]byte` / `string`
+    - Doesn't use a constant for the `.db` extension
+    - Identical dummy records for each DB
+    - No unit tests
+    - Non-idiomatic import blocks
+    - `os.IsNotExist` in `ListDBs` should be fatal, since `EnsureDBDir` should have been called by then
+
 ### Anthropic
 
 #### Claude Haiku 4.5
