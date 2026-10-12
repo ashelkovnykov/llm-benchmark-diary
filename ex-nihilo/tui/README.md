@@ -16,6 +16,7 @@ This experiment tasks the LLM with creating a simple TUI for browsing the conten
 | Gemini 3.1 Pro   | 35m         | 34s          | 35m 34s    | 18   | 8 / 10      | 12.5 / 20    |
 | MiniMax M2.7     | ~50m        | 1m 4s        | ~51m 4s    | 4    | 6 / 10      |  6.5 / 20    |
 | MiniMax M3       | 35m         | 3m 38s       | 38m 38s    | 17   | 7 / 10      | 15.5 / 20    |
+| GPT 5.6 Terra    | 35m         | 3m 8s        | 38m 8s     | 8    | 9 / 10      | 16   / 20    |
 | GPT 5.6 Sol      | 35m         | 2m 13s       | 37m 13s    | 22   | 10 / 10     | 16   / 20    |
 | GPT 5.6 Sol Pro  | 35m         | 1m 58s       | 36m 58s    | 28   | 9 / 10      | 15.5 / 20    |
 
