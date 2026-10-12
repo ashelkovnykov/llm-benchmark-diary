@@ -11,6 +11,7 @@ This experiment tasks the LLM with creating a simple TUI for browsing the conten
 | Control (None)    | ~10h        | 0s           | ~10h       | free | 6 / 10      | 14   / 20    |
 | Qwen 3.7 Plus     | 35m         | 2m 10s       | 37m 10s    | 5    | 7 / 10      | 15.5 / 20    |
 | Qwen 3.7 Max      | 35m         | 1m 29s       | 36m 29s    | 26   | 9 / 10      | 15   / 20    |
+| Qwen 3.8 Max      | 35m         | 1m 39s       | 36m 39s    | 15   | 7 / 10      | 15   / 20    |
 | Claude Haiku 4.5  | ~37m        | 12s          | 37m 12s    | 12   | 5 / 10      |  9.5 / 20    |
 | Claude Opus 4.8   | 35m         | 37s          | 35m 37s    | 66   | 8 / 10      | 14   / 20    |
 | Gemini 3.1 Pro    | 35m         | 34s          | 35m 34s    | 18   | 8 / 10      | 12.5 / 20    |
