@@ -209,6 +209,32 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Mixes value and pointer receivers
     - Could stand to split up `tui.go` into several files
 
+#### Claude Opus 5.5
+
+**Release Date:** September 22, 2026 \
+**Time:** 1m 21s \
+**Cost:** 106 credits \
+**App Quality:** 10/10 \
+**Code Quality:** 16/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot and before navigating to the DB selection screen
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Uses a constant for the `.db` extension
+    - Initializes `./db/` directory before reading contents or writing new DB
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+    - Generic seed data generation code
+- Cons:
+    - Doesn't return DB records using a custom struct; renders them directly to `string`
+    - Identical dummy records for each DB
+    - No unit tests
+
 #### Claude Fable 5.1
 
 **Release Date:** August 31, 2026 \
