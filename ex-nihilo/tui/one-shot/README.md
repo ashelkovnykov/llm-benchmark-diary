@@ -180,6 +180,62 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
         - `Model.createInput` needs to have type `*strings.Builder{}`
         - `Model.createInput` needs to be initialized in `NewInitialModel()`
 
+#### Claude Opus 4.8
+
+**Release Date:** May 27, 2026 \
+**Time:** 37s \
+**Cost:** 66 credits \
+**App Quality:** 8/10 \
+**Code Quality:** 14/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` before navigating to the DB selection screen
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Initializes `./db/` directory before reading contents or writing new DB
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses custom `Snapshot` & `Row` structs for returning fetched DB records
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Doesn't use a constant for the `.db` extension
+    - Custom `Row` struct renders contents of each column to `string`
+    - Identical dummy records for each DB
+    - No unit tests
+    - Import blocks out of order
+    - Mixes value and pointer receivers
+    - Could stand to split up `tui.go` into several files
+
+#### Claude Fable 5.1
+
+**Release Date:** August 31, 2026 \
+**Time:** 1m 7s \
+**Cost:** 182 credits \
+**App Quality:** 9/10 \
+**Code Quality:** 15.5/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot, before navigating to the DB selection screen, and before & after writing to it
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Uses a constant for the `.db` extension
+    - Initializes `./db/` directory on boot
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Doesn't return DB records using a custom struct; renders them directly to `string`
+    - Identical dummy records for each DB
+    - No unit tests
+    - Mixes value and pointer receivers
+    - Could stand to split up `model.go` into several files
+
 #### Claude Haiku 5.5
 
 **Release Date:** October 7, 2026 \
@@ -234,35 +290,6 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Identical dummy records for each DB
     - No unit tests
 
-#### Claude Opus 4.8
-
-**Release Date:** May 27, 2026 \
-**Time:** 37s \
-**Cost:** 66 credits \
-**App Quality:** 8/10 \
-**Code Quality:** 14/20
-
-**Notes:**
-
-- Pros:
-    - Manages view using internal state machine
-    - Only fetches the contents of `./db/` before navigating to the DB selection screen
-    - Only fetches DB records on DB load
-    - Embeds schema into code
-    - Initializes `./db/` directory before reading contents or writing new DB
-    - Reuses a single `regexp` struct for new DB name validation
-    - Uses custom `Snapshot` & `Row` structs for returning fetched DB records
-    - Uses `strings.Builder` for rendering
-    - Compiles without error
-- Cons:
-    - Doesn't use a constant for the `.db` extension
-    - Custom `Row` struct renders contents of each column to `string`
-    - Identical dummy records for each DB
-    - No unit tests
-    - Import blocks out of order
-    - Mixes value and pointer receivers
-    - Could stand to split up `tui.go` into several files
-
 #### Claude Opus 5.5
 
 **Release Date:** September 22, 2026 \
@@ -288,33 +315,6 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Doesn't return DB records using a custom struct; renders them directly to `string`
     - Identical dummy records for each DB
     - No unit tests
-
-#### Claude Fable 5.1
-
-**Release Date:** August 31, 2026 \
-**Time:** 1m 7s \
-**Cost:** 182 credits \
-**App Quality:** 9/10 \
-**Code Quality:** 15.5/20
-
-**Notes:**
-
-- Pros:
-    - Manages view using internal state machine
-    - Only fetches the contents of `./db/` on boot, before navigating to the DB selection screen, and before & after writing to it
-    - Only fetches DB records on DB load
-    - Embeds schema into code
-    - Uses a constant for the `.db` extension
-    - Initializes `./db/` directory on boot
-    - Reuses a single `regexp` struct for new DB name validation
-    - Uses `strings.Builder` for rendering
-    - Compiles without error
-- Cons:
-    - Doesn't return DB records using a custom struct; renders them directly to `string`
-    - Identical dummy records for each DB
-    - No unit tests
-    - Mixes value and pointer receivers
-    - Could stand to split up `model.go` into several files
 
 ### DeepSeek
 
