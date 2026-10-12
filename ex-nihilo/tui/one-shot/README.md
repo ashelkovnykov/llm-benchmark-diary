@@ -180,6 +180,32 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
         - `Model.createInput` needs to have type `*strings.Builder{}`
         - `Model.createInput` needs to be initialized in `NewInitialModel()`
 
+#### Claude Haiku 5.5
+
+**Release Date:** October 7, 2026 \
+**Time:** 45s \
+**Cost:** 3 credits \
+**App Quality:** 9/10 \
+**Code Quality:** 16/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot, and appends any new DBs created
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Uses a constant for the `.db` extension
+    - Initializes `./db/` directory before reading from / writing to it
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Doesn't return DB records using a custom struct; renders them directly to `string`
+    - Identical dummy records for each DB
+    - No unit tests
+    - Sorting DB files by name is unnecessary, since the OS will already return them in alphabetical order
+
 #### Claude Sonnet 5.5
 
 **Release Date:** September 28, 2026 \
