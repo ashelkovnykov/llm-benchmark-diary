@@ -24,6 +24,7 @@ This experiment tasks the LLM with creating a simple TUI for browsing the conten
 | Gemini 3.1 Pro      |  35m        |     34s      | 35m 34s    |  18  |  8 / 10     | 12.5 / 20    |
 | Gemini 3.8 Flash    |  35m        |     25s      | 35m 25s    |   9  | 10 / 10     | 15   / 20    |
 | Muse Spark 1.2      |  35m        |     18s      | 35m 18s    |   8  |  4 / 10     | 12   / 20    |
+| Muse Wonder         |  35m        |     17s      | 35m 17s    |  38  |  7 / 10     | 16   / 20    |
 | MiniMax M2.7        | ~50m        |  1m  4s      | 51m 4s     |   4  |  6 / 10     |  6.5 / 20    |
 | MiniMax M3          |  35m        |  3m 38s      | 38m 38s    |  17  |  7 / 10     | 15.5 / 20    |
 | Kimi K2.6           |  35m        |  5m 14s      | 40m 14s    |  22  |  9 / 10     | 14   / 20    |

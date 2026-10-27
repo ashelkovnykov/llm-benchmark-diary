@@ -468,6 +468,31 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Code would be a little nicer with helpers in `model.go`
     - `schema.sql` has a typo (`name TEXT NOT NOT NULL`) that prevents new DBs from being initialized
 
+### Muse Wonder
+
+**Release Date:** October 12, 2026 \
+**Time:** 17s \
+**Cost:** 38 credits \
+**App Quality:** 7/10 \
+**Code Quality:** 16/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot (this is okay because DBs can't be unloaded)
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Uses a constant for the `.db` extension
+    - Initializes `./db/` directory on boot and before reading from / writing to it
+    - Uses a simple ASCII range scan for DB name validation
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Doesn't return DB records using a custom struct; renders them directly to `string`
+    - Identical dummy records for each DB
+    - No unit tests
+
 ## MiniMax
 
 ### MiniMax M2.7
