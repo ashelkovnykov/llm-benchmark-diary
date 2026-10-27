@@ -37,6 +37,7 @@ This experiment tasks the LLM with creating a simple TUI for browsing the conten
 | GPT 5.6 Sol Pro     |  35m        |  1m 58s      | 36m 58s    |  28  |  9 / 10     | 15.5 / 20    |
 | GPT 6 Luna          |  35m        |     22s      | 35m 22s    |   2  |  7 / 10     | 14.5 / 20    |
 | GPT 6 Astra         |  35m        |     45s      | 35m 45s    |  85  |  9 / 10     | 15   / 20    |
+| GPT 6.1 Terra       |  35m        |     30s      | 35m 30s    |  10  |  8 / 10     | 13.5 / 20    |
 | GPT 6.1 Sol         |  35m        |     42s      | 35m 42s    |  17  |  8 / 10     | 14.5 / 20    |
 | Grok 4.7 Fast       |  35m        |  2m  6s      | 37m  6s    | ???  |  8 / 10     | 13   / 20    |
 | Grok 4.7 Expert     |  35m        |  3m 25s      | 38m 25s    | ???  |  9 / 10     | 14.5 / 20    |

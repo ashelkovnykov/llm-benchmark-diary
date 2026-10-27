@@ -858,6 +858,34 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - No independent name validation helper
     - It goes through a whole unnecessary rigamarole just to open a local sqlite DB
 
+### GPT 6.1 Terra
+
+**Release Date:** October 26, 2026 \
+**Time:** 30s \
+**Cost:** 10 credits \
+**App Quality:** 8/10 \
+**Code Quality:** 13.5/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot, before navigating to the DB selection screen, before reading, and after writing
+    - Only fetches DB records on DB load and on demand
+    - Initializes `./db/` directory before reading from it
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses a custom `Snapshot` struct for DB summary
+    - Uses `strings.Builder` for rendering, with extra efficient writes
+    - Compiles without error
+- Cons:
+    - Doesn't embed the schema into the code
+    - Doesn't use a constant for the `.db` extension
+    - `Snapshot` struct holds records as rendered `strings`
+    - Identical dummy records for each DB
+    - No unit tests
+    - System of rejecting any Bubble Tea messages other than `tea.KeyMsg` is restrictive
+    - Could stand to split `Update()` with helpers
+
 ### GPT 6.1 Sol
 
 **Release Date:** September 29, 2026 \
