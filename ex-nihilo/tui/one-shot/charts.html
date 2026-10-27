@@ -1,3 +1,7 @@
+<!-- How long the models ran should use total time, not just passive time -->
+<!-- I'd prefer the key in the code-quality checks to be vertical in 2 or 3 columns -->
+<!-- the app rubric behaviours are absolutely broken out in the documentation. app quality checks just like the code quality checks should be a section -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -245,15 +249,13 @@
   <header class="mast">
     <p class="eyebrow">Ex nihilo / TUI / one-shot</p>
     <h1>One-shot <em>showdown</em></h1>
-    <p class="lede">Thirty-one models got the same prompt: a Bubble Tea SQLite browser, from an empty directory. The summary table already lists time, cost, and two grades. These four views are that table, plus the code-quality checks from the per-model notes.</p>
     <nav class="toc" aria-label="Sections">
-      <a href="#paired">App and code</a>
+      <a href="#paired">Output quality</a>
       <a href="#cost">Credits</a>
       <a href="#time">Model time</a>
       <a href="#checks">Code checks</a>
       <a href="#table">Table</a>
     </nav>
-    <div class="stats" id="stats"></div>
   </header>
 
   <div class="filters">
@@ -263,8 +265,8 @@
   </div>
 
   <section id="paired">
-    <h2>App and code quality</h2>
-    <p>Each row is one model. Blue is app quality and green is code quality. Both are scaled to 100, so an app score of 8/10 and a code score of 16/20 land on the same mark. The number on the right is code minus app on that scale. Sort applies to this chart, the code-quality checks, and the table.</p>
+    <h2>Output quality</h2>
+    <p>Scores are scaled to 100 (e.g. 8/10 and 16/20 both land on 80). The number on the right is code score minus app score.</p>
     <div class="row" id="sort-buttons" style="display:flex;flex-wrap:wrap;gap:8px;margin:10px 0">
       <span class="lab" style="align-self:center">Sort</span>
     </div>
@@ -272,16 +274,16 @@
       <div class="legend">
         <span><i class="swatch app"></i> App quality</span>
         <span><i class="swatch code"></i> Code quality</span>
-        <span><i class="swatch ctl"></i> Human control, shown when every vendor is visible</span>
+        <span><i class="swatch ctl"></i> Human control</span>
       </div>
       <div class="scroll" id="dumbbell"></div>
-      <p class="note">The number at the right is code minus app, in points on this 0–100 scale. Control took about 10 hours of active work, scored 6/10 and 14/20, and is not a model.</p>
+      <p class="note">Control is not a model, it's a manual implementation that took roughly 10 hours of active work.</p>
     </div>
   </section>
 
   <section id="cost">
-    <h2>What the credits bought</h2>
-    <p>Combined quality gives the two rubrics equal weight after scaling: the average of app-as-a-percent and code-as-a-percent. Cost is on a log scale. Bubble area is passive time, the minutes the model ran. Grok has no credit figure, so it is listed beside the plot instead of given a fake x position.</p>
+    <h2>What credits bought</h2>
+    <p>Combined quality gives the two rubrics equal weight after scaling: the average of app-as-a-percent and code-as-a-percent. Cost is on a log scale. Bubble area is passive time (how long the model ran). Grok models are not pictured, as they have no credit figures.</p>
     <div class="card">
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px">
         <button type="button" id="label-toggle" aria-pressed="false">Label every model</button>
@@ -291,19 +293,18 @@
       <p class="note" id="scatter-note"></p>
     </div>
     <h3>Quality per credit</h3>
-    <p>Combined points divided by credits. Higher means more grade per credit. A cheap broken run can still rank above an expensive clean one. The code-quality checks show compile errors, tests, and the other rubric items.</p>
+    <p>Combined points divided by cost in credits. Higher score means more performance per credit. Keep this in mind, as it's possible for cheap broken output to score higher than expensive clean output.</p>
     <div class="card"><div class="scroll" id="value"></div></div>
   </section>
 
   <section id="time">
-    <h2>How long the model ran</h2>
-    <p>Passive time from the summary table. Prompt-writing time is about 35 minutes for every model, so it is left off. Where the table's active time rises above 35 minutes, the notes include hand repair: MiniMax M2.7 (~50m), DeepSeek V4 Pro (~38m), Haiku 4.5 (~37m), and both MiMo runs (~36m).</p>
+    <h2>How long the models ran</h2>
+    <p>Passive time from the summary table. All models used the same prompt, which took 35 minutes to write. Some models produced broken output that required additional active time to fix.</p>
     <div class="card"><div class="scroll" id="timechart"></div></div>
   </section>
 
   <section id="checks">
     <h2>Code-quality checks</h2>
-    <p id="check-summary"></p>
     <div class="key" id="check-key"></div>
     <div class="legend">
       <span><i class="swatch" style="background:#E4F0EA;border-radius:3px"></i> yes</span>
@@ -312,7 +313,7 @@
       <span><i class="swatch" style="background:transparent;border:1.5px solid var(--g300);border-radius:3px"></i> not mentioned</span>
     </div>
     <div class="card scroll" id="heatmap"></div>
-    <p class="note">This is a reading of <code>one-shot/README.md</code>, not a rescore. The three code-style points are not a column. A mixed cell is a pro the notes themselves qualify. Hover a cell for the phrase it came from. GLM 5.3 produced no score and is absent. The app rubric's ten behaviors are not broken out in the notes, so they stay a single number.</p>
+    <p class="note">"Mixed" cells are qualified pros / cons. Hover a cell to see more info.</p>
   </section>
 
   <section id="table">
@@ -336,14 +337,9 @@
     </div>
   </section>
 
-  <details>
-    <summary>How a cell was decided</summary>
-    <div id="methods"></div>
-  </details>
-
   <footer>
-    <p>Scores, costs, and times are copied from the one-shot table in <code>ex-nihilo/tui/README.md</code>. GPT 6 Astra is 85 credits there. The model notes say 82. GPT 5.6 Terra Pro's code grade is 15.5/20 there. The notes write 15.5/16. Charts use the summary table.</p>
-    <p>Code-quality checks are read from <code>ex-nihilo/tui/one-shot/README.md</code>. Grok's credit cost is unknown because that run went through the xAI interface.</p>
+    <p>Scores, costs, and times are copied from the one-shot table in <code>ex-nihilo/tui/README.md</code>.</p>
+    <p>Code-quality checks are read from <code>ex-nihilo/tui/one-shot/README.md</code>. Grok model's credit costs are unknown due to using the xAI interface.</p>
   </footer>
 </div>
 <div class="tip" id="tip" hidden></div>
@@ -366,7 +362,7 @@
   {"name":"Gemini 3.8 Flash","vendor":"Google","cost":9,"app":10,"code":15,"passive":25,"passiveLabel":"25s","checks":"PPPPFPFPPFFP","mark":true,"why":{"valid":"Does not reuse one regexp for name checks."}},
   {"name":"Muse Spark 1.2","vendor":"Meta","cost":8,"app":4,"code":12,"passive":18,"passiveLabel":"18s","checks":"PPPFFPPHPFFP","mark":true,"why":{"schema":"Schema stays on disk. schema.sql contains NOT NOT NULL, so a new database fails to initialize.","ext":"Accepts more than one extension, and does not keep one in a constant.","struct":"Stats exists, and it holds record values as rendered strings."}},
   {"name":"MiniMax M2.7","vendor":"MiniMax","cost":4,"app":6,"code":6.5,"passive":64,"passiveLabel":"1m 4s","checks":"FPPHFPPPFFFF","mark":true,"why":{"sm":"Separate list and view models, plus a two-phase load-then-view in main.go.","schema":"schema.sql is unused. The schema is hardcoded in schema.go.","compile":"Does not compile until duplicated definitions are removed. The notes say that cleanup added no new code."}},
-  {"name":"MiniMax M3","vendor":"MiniMax","cost":17,"app":7,"code":15.5,"passive":218,"passiveLabel":"3m 38s","checks":"PPPPFPPPP??P","why":{"seed":"The notes never mention whether the dummy rows differ.","tests":"The notes never mention unit tests."}},
+  {"name":"MiniMax M3","vendor":"MiniMax","cost":17,"app":7,"code":15.5,"passive":218,"passiveLabel":"3m 38s","checks":"PPPPFPPPPFFP","mark":true},
   {"name":"Kimi K2.6","vendor":"Moonshot","cost":22,"app":9,"code":14,"passive":314,"passiveLabel":"5m 14s","checks":"PPPPFPFPPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","valid":"Does not reuse one regexp for name checks."}},
   {"name":"Kimi K3","vendor":"Moonshot","cost":20,"app":7,"code":16,"passive":49,"passiveLabel":"49s","checks":"PPPPFPPFPFFP","mark":true,"why":{"ext":"No extension constant. Files use .sqlite.","dbdir":"A directory constant in db.go is unused by main.go. The directory is still created at boot."}},
   {"name":"GPT 5.6 Terra","vendor":"OpenAI","cost":8,"app":9,"code":16,"passive":188,"passiveLabel":"3m 8s","checks":"PPPPPPPHPFFP","mark":true,"why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","struct":"Table exists, and it holds record values as rendered strings."}},
@@ -377,7 +373,7 @@
   {"name":"GPT 6 Astra","vendor":"OpenAI","cost":85,"app":9,"code":15,"passive":45,"passiveLabel":"45s","checks":"PPPPFPPHPFFP","mark":true,"costNote":"85 credits in the summary table. The model notes say 82.","why":{"struct":"Snapshot exists, and it holds records as rendered strings."}},
   {"name":"GPT 6.1 Sol","vendor":"OpenAI","cost":17,"app":8,"code":14.5,"passive":42,"passiveLabel":"42s","checks":"PPPPPPPHPFFP","why":{"ext":"The constant is for .sqlite, not .db. The notes count that constant as a pro.","struct":"Preview exists, and it holds record values as rendered strings."}},
   {"name":"Grok 4.7 Fast","vendor":"xAI","cost":null,"app":8,"code":13,"passive":126,"passiveLabel":"2m 6s","checks":"PPPFFPPFFFFP","why":{"schema":"schema.sql is read from disk. It is not embedded.","builder":"Rendering does not use strings.Builder."}},
-  {"name":"Grok 4.7 Expert","vendor":"xAI","cost":null,"app":9,"code":14.5,"passive":205,"passiveLabel":"3m 25s","checks":"PPPPFPPPFFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","ext":"The line sits under pros, and it is the absence of a .db constant.","builder":"Rendering does not use strings.Builder."}},
+  {"name":"Grok 4.7 Expert","vendor":"xAI","cost":null,"app":9,"code":14.5,"passive":205,"passiveLabel":"3m 25s","checks":"PPPPFPPPFFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","builder":"Rendering does not use strings.Builder."}},
   {"name":"MiMo V2.6 Flash","vendor":"Xiaomi","cost":3,"app":9,"code":13,"passive":199,"passiveLabel":"3m 19s","checks":"PPPPPPPFPFFF","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","compile":"Two compile errors: Preview is both a type and a function, and main calls ui.New instead of passing it to tea.NewProgram."}},
   {"name":"MiMo V2.6 Pro","vendor":"Xiaomi","cost":9,"app":9,"code":13,"passive":478,"passiveLabel":"7m 58s","checks":"PPPPPPPHPFFF","mark":true,"why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","struct":"Table exists, and it holds record values as rendered strings.","seed":"The seed generator is generic. Every database still gets the same rows, which is the cons line.","compile":"Three build failures: the pinned bubbletea version does not exist, viewer.go does not import lipgloss, and create.go imports textinput unused."}},
   {"name":"GLM 5.3 Flash","vendor":"Z AI","cost":1,"app":8,"code":13,"passive":11,"passiveLabel":"11s","checks":"PPFFFPPPFFFP","mark":true,"why":{"rec":"Fetches records again on every redraw.","schema":"Schema is not embedded.","builder":"Rendering does not use strings.Builder."}}
@@ -509,37 +505,6 @@ function modelLines(m) {
   if (m.cost != null) lines.push({ k: "Pts / credit", v: fmt(combined(m) / m.cost) });
   if (m.costNote) lines.push(m.costNote);
   return lines;
-}
-
-function renderStats() {
-  const list = MODELS;
-  const byCombined = list.slice().sort((a, b) => combined(b) - combined(a) || (a.cost ?? 1e9) - (b.cost ?? 1e9));
-  const best = byCombined[0];
-  const ties = byCombined.filter(m => combined(m) === combined(best));
-  const short = (name) => name.replace(/^Claude /, "").replace(/^GPT /, "");
-  const priced = list.filter(m => m.cost != null);
-  const efficient = priced.slice().sort((a, b) => (combined(b) / b.cost) - (combined(a) / a.cost))[0];
-  const gapOf = m => pctCode(m) - pctApp(m);
-  const codeHigh = list.slice().sort((a, b) => gapOf(b) - gapOf(a))[0];
-  const appHigh = list.slice().sort((a, b) => gapOf(a) - gapOf(b))[0];
-  const cards = [
-    [ties.map(m => short(m.name)).join(" · "), "Highest combined, " + fmt(combined(best))],
-    [efficient.name, fmt(combined(efficient) / efficient.cost) + " pts per credit"],
-    [codeHigh.name, "Code above app by " + fmt(gapOf(codeHigh))],
-    [appHigh.name, "App above code by " + fmt(-gapOf(appHigh))]
-  ];
-  const host = document.getElementById("stats");
-  host.replaceChildren();
-  for (const [title, sub] of cards) {
-    const d = document.createElement("div");
-    d.className = "stat";
-    const b = document.createElement("b");
-    b.textContent = title;
-    const s = document.createElement("span");
-    s.textContent = sub;
-    d.append(b, s);
-    host.appendChild(d);
-  }
 }
 
 function renderFilters() {
@@ -754,10 +719,6 @@ function renderScatter() {
   const host = document.getElementById("scatter");
   host.replaceChildren(svg);
   const missing = filtered().filter(m => m.cost == null);
-  const note = document.getElementById("scatter-note");
-  note.textContent = missing.length
-    ? "No credit cost, so omitted from the plot and the rate chart: " + missing.map(m => m.name + " (" + m.passiveLabel + ", combined " + fmt(combined(m)) + ")").join("; ") + "."
-    : "Every visible model has a credit cost.";
 }
 
 function hbars(hostId, rows, valueOf, labelOf, maxOf, aria) {
@@ -855,12 +816,6 @@ function renderHeat() {
   table.appendChild(tb);
   document.getElementById("heatmap").replaceChildren(table);
 
-  const tally = (ch, idx) => rows.filter(m => m.checks[idx] === ch).length;
-  const seed = CHECKS.findIndex(c => c[0] === "seed");
-  const tests = CHECKS.findIndex(c => c[0] === "tests");
-  const summary = document.getElementById("check-summary");
-  summary.textContent = "Among the " + rows.length + " visible notes, unique seed data is a yes for " + tally("P", seed) + ", a no for " + tally("F", seed) + ", and unmentioned for " + tally("?", seed) + ". Unit tests are a yes for " + tally("P", tests) + ", a no for " + tally("F", tests) + ", and unmentioned for " + tally("?", tests) + ".";
-
   const key = document.getElementById("check-key");
   key.replaceChildren();
   for (const [, short, full] of CHECKS) {
@@ -903,19 +858,6 @@ function renderTable() {
   });
 }
 
-function renderMethods() {
-  const host = document.getElementById("methods");
-  const ul = document.createElement("ul");
-  for (const [, short, full, about] of CHECKS) {
-    const li = document.createElement("li");
-    li.textContent = short + " — " + full + ". " + about;
-    ul.appendChild(li);
-  }
-  const p = document.createElement("p");
-  p.textContent = "Yes means the notes list the behavior. No means the notes deny it. Mixed means the notes both claim it and qualify it, or the written rubric and the note pull apart, as with GPT 6 Luna's directory fetch. Not mentioned means that note is silent. embed.FS still counts as an embedded schema. A .sqlite constant still counts as an extension constant. Identical dummy rows fail the seed check even when the generator is generic. Compile is no only when the notes list build errors. Haiku 4.5 is mixed because the notes describe a crash and two edits rather than a compiler log.";
-  host.replaceChildren(p, ul);
-}
-
 function render() {
   renderDumbbell();
   renderScatter();
@@ -926,8 +868,6 @@ function render() {
 }
 
 renderFilters();
-renderStats();
-renderMethods();
 render();
 </script>
 </body>
