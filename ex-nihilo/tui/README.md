@@ -23,6 +23,7 @@ This experiment tasks the LLM with creating a simple TUI for browsing the conten
 | DeepSeek V4.1 Flash |  35m        |  1m 48s      | 36m 48s    |   6  |  8 / 10     | 14.5 / 20    |
 | Gemini 3.1 Pro      |  35m        |     34s      | 35m 34s    |  18  |  8 / 10     | 12.5 / 20    |
 | Gemini 3.8 Flash    |  35m        |     25s      | 35m 25s    |   9  | 10 / 10     | 15   / 20    |
+| Gemini 4 Argon      |  35m        |     44s      | 35m 44s    |  20  |  9 / 10     | 15.5 / 20    |
 | Muse Spark 1.2      |  35m        |     18s      | 35m 18s    |   8  |  4 / 10     | 12   / 20    |
 | Muse Wonder         |  35m        |     17s      | 35m 17s    |  38  |  7 / 10     | 16   / 20    |
 | MiniMax M2.7        | ~50m        |  1m  4s      | 51m 4s     |   4  |  6 / 10     |  6.5 / 20    |

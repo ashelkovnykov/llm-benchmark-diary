@@ -436,6 +436,34 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Non-idiomatic import blocks
     - Mixes value and pointer receivers
 
+### Gemini 4 Argon
+
+**Release Date:** October 13, 2026 \
+**Time:** 44s \
+**Cost:** 20 credits \
+**App Quality:** 9/10 \
+**Code Quality:** 15.5/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot, before navigating to the DB selection screen, and during new DB creation
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Initializes `./db/` directory before reading from it
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses a custom `Record` struct for returning fetched DB records
+    - Uses `strings.Builder` for rendering
+    - Compiles without error
+- Cons:
+    - Doesn't use a constant for the `.db` extension
+    - Identical dummy records for each DB
+    - No unit tests
+    - Unnecessary parameterization in Makefile
+    - Non-idiomatic import blocks
+    - Mismatch between using key constants and explicit keys in `Model.Update()` helpers
+
 ## Meta AI
 
 ### Muse Spark 1.2
