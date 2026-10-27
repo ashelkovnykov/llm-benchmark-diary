@@ -650,6 +650,31 @@ The following prompt was used for all of the models. It took ~35 minutes to writ
     - Has a constant for the `./db` directory in `db.go` but doesn't use it in `main.go`
     - Could stand to split up `model.go` into several files
 
+### Kimi K3.1 Pro
+
+**Release Date:** October 23, 2026 \
+**Time:** 1m 57s \
+**Cost:** 26 credits \
+**App Quality:** 7/10 \
+**Code Quality:** 15/20
+
+**Notes:**
+
+- Pros:
+    - Manages view using internal state machine
+    - Only fetches the contents of `./db/` on boot, during validation, and after creating a new DB (though this is unnecessary since DBs can't be unloaded)
+    - Only fetches DB records on DB load
+    - Embeds schema into code
+    - Initializes `./db/` directory before writing to it
+    - Reuses a single `regexp` struct for new DB name validation
+    - Uses a custom `Snapshot` struct for DB summary
+    - Uses `strings.Builder` for rendering, with extra efficient writes
+- Cons:
+    - Doesn't use a constant for the `.db` extension
+    - `Snapshot` struct holds record values as rendered `string`s
+    - Identical dummy records for each DB
+    - No unit tests
+
 ## OpenAI
 
 ### GPT 5.6 Terra
