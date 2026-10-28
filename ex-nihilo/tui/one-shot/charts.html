@@ -1,4 +1,3 @@
-<!-- How long the models ran should use total time, not just passive time -->
 <!-- I'd prefer the key in the code-quality checks to be vertical in 2 or 3 columns -->
 <!-- the app rubric behaviours are absolutely broken out in the documentation. app quality checks just like the code quality checks should be a section -->
 
@@ -283,7 +282,7 @@
 
   <section id="cost">
     <h2>What credits bought</h2>
-    <p>Combined quality gives the two rubrics equal weight after scaling: the average of app-as-a-percent and code-as-a-percent. Cost is on a log scale. Bubble area is passive time (how long the model ran). Grok models are not pictured, as they have no credit figures.</p>
+    <p>Combined quality gives the two rubrics equal weight after scaling: the average of app-as-a-percent and code-as-a-percent. Cost is on a log scale. Bubble area is total time. Grok models are not pictured, as they have no credit figures.</p>
     <div class="card">
       <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px">
         <button type="button" id="label-toggle" aria-pressed="false">Label every model</button>
@@ -299,8 +298,14 @@
 
   <section id="time">
     <h2>How long the models ran</h2>
-    <p>Passive time from the summary table. All models used the same prompt, which took 35 minutes to write. Some models produced broken output that required additional active time to fix.</p>
-    <div class="card"><div class="scroll" id="timechart"></div></div>
+    <p>Each bar is total time from the summary table: active time, then passive time. Gray includes the shared 35-minute prompt. A longer gray segment is time spent fixing broken output. Color is how long the model ran.</p>
+    <div class="card">
+      <div class="legend">
+        <span><i class="swatch" style="background:#C6C3B8;border-radius:2px"></i> Active</span>
+        <span><i class="swatch" style="background:#2F5F8A;border-radius:2px"></i> Passive</span>
+      </div>
+      <div class="scroll" id="timechart"></div>
+    </div>
   </section>
 
   <section id="checks">
@@ -329,7 +334,7 @@
             <th class="num"><button type="button" data-sort="combined">Combined</button></th>
             <th class="num"><button type="button" data-sort="cost">Credits</button></th>
             <th class="num"><button type="button" data-sort="value">Pts / credit</button></th>
-            <th class="num"><button type="button" data-sort="time">Passive</button></th>
+            <th class="num"><button type="button" data-sort="time">Total</button></th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -346,37 +351,37 @@
 
 <script type="application/json" id="models-data">
 [
-  {"name":"Qwen 3.7 Plus","vendor":"Alibaba","cost":5,"app":7,"code":15.5,"passive":130,"passiveLabel":"2m 10s","checks":"PPPPFPPPPFFP"},
-  {"name":"Qwen 3.7 Max","vendor":"Alibaba","cost":26,"app":9,"code":15,"passive":89,"passiveLabel":"1m 29s","checks":"PPPPFPPPPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice."}},
-  {"name":"Qwen 3.8 Flash","vendor":"Alibaba","cost":11,"app":8,"code":13.5,"passive":825,"passiveLabel":"13m 45s","checks":"PPPPFPPHPFFP","mark":true,"why":{"struct":"Preview exists, and it holds record values as rendered strings."}},
-  {"name":"Qwen 3.8 Max","vendor":"Alibaba","cost":15,"app":7,"code":15,"passive":99,"passiveLabel":"1m 39s","checks":"PPPPFFPPPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","dbdir":"Never creates ./db/. A missing directory becomes a runtime error."}},
-  {"name":"Claude Haiku 4.5","vendor":"Anthropic","cost":12,"app":5,"code":9.5,"passive":12,"passiveLabel":"12s","checks":"PPPFFPFFPFFH","mark":true,"why":{"compile":"New-database creation crashes until createInput is a strings.Builder and NewInitialModel initializes it. The notes describe a crash and two required edits, not a compiler log."}},
-  {"name":"Claude Opus 4.8","vendor":"Anthropic","cost":66,"app":8,"code":14,"passive":37,"passiveLabel":"37s","checks":"PPPPFPPHPFFP","why":{"struct":"Snapshot and Row exist. Row stores each column as a string."}},
-  {"name":"Claude Fable 5.1","vendor":"Anthropic","cost":182,"app":9,"code":15.5,"passive":67,"passiveLabel":"1m 7s","checks":"PPPPPPPFPFFP","mark":true},
-  {"name":"Claude Haiku 5.5","vendor":"Anthropic","cost":3,"app":9,"code":16,"passive":45,"passiveLabel":"45s","checks":"PPPPPPPFPFFP","mark":true},
-  {"name":"Claude Sonnet 5.5","vendor":"Anthropic","cost":39,"app":9,"code":15,"passive":43,"passiveLabel":"43s","checks":"PPPPPPPHPFFP","why":{"struct":"Snapshot exists, and it holds records as rendered strings."}},
-  {"name":"Claude Opus 5.5","vendor":"Anthropic","cost":106,"app":10,"code":16,"passive":81,"passiveLabel":"1m 21s","checks":"PPPPPPPFPFFP","mark":true,"why":{"seed":"The seed generator is generic. Every database still gets the same rows, which is the cons line."}},
-  {"name":"DeepSeek V4 Pro","vendor":"DeepSeek","cost":8,"app":9,"code":9.5,"passive":192,"passiveLabel":"3m 12s","checks":"PPPPFPPFPFFF","mark":true,"why":{"compile":"Does not compile as emitted: unused filepath imports, missing textinput and lipgloss imports, CreateDB's schema argument, and loadCmd's database names."}},
-  {"name":"DeepSeek V4.1 Flash","vendor":"DeepSeek","cost":6,"app":8,"code":14.5,"passive":108,"passiveLabel":"1m 48s","checks":"PPPPPPPFPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","ext":"The constant is for .sqlite, not .db. The notes count that constant as a pro."}},
-  {"name":"Gemini 3.1 Pro","vendor":"Google","cost":18,"app":8,"code":12.5,"passive":34,"passiveLabel":"34s","checks":"PPPFFHFPFFFP","why":{"dbdir":"Directory creation is split across the Makefile, main.go, and db.go.","builder":"Rendering does not use strings.Builder."}},
-  {"name":"Gemini 3.8 Flash","vendor":"Google","cost":9,"app":10,"code":15,"passive":25,"passiveLabel":"25s","checks":"PPPPFPFPPFFP","mark":true,"why":{"valid":"Does not reuse one regexp for name checks."}},
-  {"name":"Muse Spark 1.2","vendor":"Meta","cost":8,"app":4,"code":12,"passive":18,"passiveLabel":"18s","checks":"PPPFFPPHPFFP","mark":true,"why":{"schema":"Schema stays on disk. schema.sql contains NOT NOT NULL, so a new database fails to initialize.","ext":"Accepts more than one extension, and does not keep one in a constant.","struct":"Stats exists, and it holds record values as rendered strings."}},
-  {"name":"MiniMax M2.7","vendor":"MiniMax","cost":4,"app":6,"code":6.5,"passive":64,"passiveLabel":"1m 4s","checks":"FPPHFPPPFFFF","mark":true,"why":{"sm":"Separate list and view models, plus a two-phase load-then-view in main.go.","schema":"schema.sql is unused. The schema is hardcoded in schema.go.","compile":"Does not compile until duplicated definitions are removed. The notes say that cleanup added no new code."}},
-  {"name":"MiniMax M3","vendor":"MiniMax","cost":17,"app":7,"code":15.5,"passive":218,"passiveLabel":"3m 38s","checks":"PPPPFPPPPFFP","mark":true},
-  {"name":"Kimi K2.6","vendor":"Moonshot","cost":22,"app":9,"code":14,"passive":314,"passiveLabel":"5m 14s","checks":"PPPPFPFPPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","valid":"Does not reuse one regexp for name checks."}},
-  {"name":"Kimi K3","vendor":"Moonshot","cost":20,"app":7,"code":16,"passive":49,"passiveLabel":"49s","checks":"PPPPFPPFPFFP","mark":true,"why":{"ext":"No extension constant. Files use .sqlite.","dbdir":"A directory constant in db.go is unused by main.go. The directory is still created at boot."}},
-  {"name":"GPT 5.6 Terra","vendor":"OpenAI","cost":8,"app":9,"code":16,"passive":188,"passiveLabel":"3m 8s","checks":"PPPPPPPHPFFP","mark":true,"why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","struct":"Table exists, and it holds record values as rendered strings."}},
-  {"name":"GPT 5.6 Terra Pro","vendor":"OpenAI","cost":10,"app":10,"code":15.5,"passive":167,"passiveLabel":"2m 47s","checks":"PPPPPPPHPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","struct":"Summary exists, and it holds record values as rendered strings."}},
-  {"name":"GPT 5.6 Sol","vendor":"OpenAI","cost":22,"app":10,"code":16,"passive":133,"passiveLabel":"2m 13s","checks":"PPPPPPPFPFFP","mark":true,"why":{"schema":"Embedded, as embed.FS rather than a string or byte slice."}},
-  {"name":"GPT 5.6 Sol Pro","vendor":"OpenAI","cost":28,"app":9,"code":15.5,"passive":118,"passiveLabel":"1m 58s","checks":"PPPPPPPHPFFP","why":{"struct":"Snapshot exists, and it holds records as rendered strings."}},
-  {"name":"GPT 6 Luna","vendor":"OpenAI","cost":2,"app":7,"code":14.5,"passive":22,"passiveLabel":"22s","checks":"PHPPFPPFPFFP","mark":true,"why":{"dir":"The directory is fetched only at boot. The notes call that a bug because a database can be unloaded. The written rubric still awards the point when a run does not refetch on every redraw, so this cell is mixed.","schema":"Embedded, as embed.FS rather than a string or byte slice."}},
-  {"name":"GPT 6 Astra","vendor":"OpenAI","cost":85,"app":9,"code":15,"passive":45,"passiveLabel":"45s","checks":"PPPPFPPHPFFP","mark":true,"costNote":"85 credits in the summary table. The model notes say 82.","why":{"struct":"Snapshot exists, and it holds records as rendered strings."}},
-  {"name":"GPT 6.1 Sol","vendor":"OpenAI","cost":17,"app":8,"code":14.5,"passive":42,"passiveLabel":"42s","checks":"PPPPPPPHPFFP","why":{"ext":"The constant is for .sqlite, not .db. The notes count that constant as a pro.","struct":"Preview exists, and it holds record values as rendered strings."}},
-  {"name":"Grok 4.7 Fast","vendor":"xAI","cost":null,"app":8,"code":13,"passive":126,"passiveLabel":"2m 6s","checks":"PPPFFPPFFFFP","why":{"schema":"schema.sql is read from disk. It is not embedded.","builder":"Rendering does not use strings.Builder."}},
-  {"name":"Grok 4.7 Expert","vendor":"xAI","cost":null,"app":9,"code":14.5,"passive":205,"passiveLabel":"3m 25s","checks":"PPPPFPPPFFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","builder":"Rendering does not use strings.Builder."}},
-  {"name":"MiMo V2.6 Flash","vendor":"Xiaomi","cost":3,"app":9,"code":13,"passive":199,"passiveLabel":"3m 19s","checks":"PPPPPPPFPFFF","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","compile":"Two compile errors: Preview is both a type and a function, and main calls ui.New instead of passing it to tea.NewProgram."}},
-  {"name":"MiMo V2.6 Pro","vendor":"Xiaomi","cost":9,"app":9,"code":13,"passive":478,"passiveLabel":"7m 58s","checks":"PPPPPPPHPFFF","mark":true,"why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","struct":"Table exists, and it holds record values as rendered strings.","seed":"The seed generator is generic. Every database still gets the same rows, which is the cons line.","compile":"Three build failures: the pinned bubbletea version does not exist, viewer.go does not import lipgloss, and create.go imports textinput unused."}},
-  {"name":"GLM 5.3 Flash","vendor":"Z AI","cost":1,"app":8,"code":13,"passive":11,"passiveLabel":"11s","checks":"PPFFFPPPFFFP","mark":true,"why":{"rec":"Fetches records again on every redraw.","schema":"Schema is not embedded.","builder":"Rendering does not use strings.Builder."}}
+  {"name":"Qwen 3.7 Plus","vendor":"Alibaba","cost":5,"app":7,"code":15.5,"passive":130,"passiveLabel":"2m 10s","active":2100,"activeLabel":"35m","checks":"PPPPFPPPPFFP"},
+  {"name":"Qwen 3.7 Max","vendor":"Alibaba","cost":26,"app":9,"code":15,"passive":89,"passiveLabel":"1m 29s","active":2100,"activeLabel":"35m","checks":"PPPPFPPPPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice."}},
+  {"name":"Qwen 3.8 Flash","vendor":"Alibaba","cost":11,"app":8,"code":13.5,"passive":825,"passiveLabel":"13m 45s","active":2100,"activeLabel":"35m","checks":"PPPPFPPHPFFP","mark":true,"why":{"struct":"Preview exists, and it holds record values as rendered strings."}},
+  {"name":"Qwen 3.8 Max","vendor":"Alibaba","cost":15,"app":7,"code":15,"passive":99,"passiveLabel":"1m 39s","active":2100,"activeLabel":"35m","checks":"PPPPFFPPPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","dbdir":"Never creates ./db/. A missing directory becomes a runtime error."}},
+  {"name":"Claude Haiku 4.5","vendor":"Anthropic","cost":12,"app":5,"code":9.5,"passive":12,"passiveLabel":"12s","active":2220,"activeLabel":"~37m","checks":"PPPFFPFFPFFH","mark":true,"why":{"compile":"New-database creation crashes until createInput is a strings.Builder and NewInitialModel initializes it. The notes describe a crash and two required edits, not a compiler log."}},
+  {"name":"Claude Opus 4.8","vendor":"Anthropic","cost":66,"app":8,"code":14,"passive":37,"passiveLabel":"37s","active":2100,"activeLabel":"35m","checks":"PPPPFPPHPFFP","why":{"struct":"Snapshot and Row exist. Row stores each column as a string."}},
+  {"name":"Claude Fable 5.1","vendor":"Anthropic","cost":182,"app":9,"code":15.5,"passive":67,"passiveLabel":"1m 7s","active":2100,"activeLabel":"35m","checks":"PPPPPPPFPFFP","mark":true},
+  {"name":"Claude Haiku 5.5","vendor":"Anthropic","cost":3,"app":9,"code":16,"passive":45,"passiveLabel":"45s","active":2100,"activeLabel":"35m","checks":"PPPPPPPFPFFP","mark":true},
+  {"name":"Claude Sonnet 5.5","vendor":"Anthropic","cost":39,"app":9,"code":15,"passive":43,"passiveLabel":"43s","active":2100,"activeLabel":"35m","checks":"PPPPPPPHPFFP","why":{"struct":"Snapshot exists, and it holds records as rendered strings."}},
+  {"name":"Claude Opus 5.5","vendor":"Anthropic","cost":106,"app":10,"code":16,"passive":81,"passiveLabel":"1m 21s","active":2100,"activeLabel":"35m","checks":"PPPPPPPFPFFP","mark":true,"why":{"seed":"The seed generator is generic. Every database still gets the same rows, which is the cons line."}},
+  {"name":"DeepSeek V4 Pro","vendor":"DeepSeek","cost":8,"app":9,"code":9.5,"passive":192,"passiveLabel":"3m 12s","active":2280,"activeLabel":"~38m","checks":"PPPPFPPFPFFF","mark":true,"why":{"compile":"Does not compile as emitted: unused filepath imports, missing textinput and lipgloss imports, CreateDB's schema argument, and loadCmd's database names."}},
+  {"name":"DeepSeek V4.1 Flash","vendor":"DeepSeek","cost":6,"app":8,"code":14.5,"passive":108,"passiveLabel":"1m 48s","active":2100,"activeLabel":"35m","checks":"PPPPPPPFPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","ext":"The constant is for .sqlite, not .db. The notes count that constant as a pro."}},
+  {"name":"Gemini 3.1 Pro","vendor":"Google","cost":18,"app":8,"code":12.5,"passive":34,"passiveLabel":"34s","active":2100,"activeLabel":"35m","checks":"PPPFFHFPFFFP","why":{"dbdir":"Directory creation is split across the Makefile, main.go, and db.go.","builder":"Rendering does not use strings.Builder."}},
+  {"name":"Gemini 3.8 Flash","vendor":"Google","cost":9,"app":10,"code":15,"passive":25,"passiveLabel":"25s","active":2100,"activeLabel":"35m","checks":"PPPPFPFPPFFP","mark":true,"why":{"valid":"Does not reuse one regexp for name checks."}},
+  {"name":"Muse Spark 1.2","vendor":"Meta","cost":8,"app":4,"code":12,"passive":18,"passiveLabel":"18s","active":2100,"activeLabel":"35m","checks":"PPPFFPPHPFFP","mark":true,"why":{"schema":"Schema stays on disk. schema.sql contains NOT NOT NULL, so a new database fails to initialize.","ext":"Accepts more than one extension, and does not keep one in a constant.","struct":"Stats exists, and it holds record values as rendered strings."}},
+  {"name":"MiniMax M2.7","vendor":"MiniMax","cost":4,"app":6,"code":6.5,"passive":64,"passiveLabel":"1m 4s","active":3000,"activeLabel":"~50m","checks":"FPPHFPPPFFFF","mark":true,"why":{"sm":"Separate list and view models, plus a two-phase load-then-view in main.go.","schema":"schema.sql is unused. The schema is hardcoded in schema.go.","compile":"Does not compile until duplicated definitions are removed. The notes say that cleanup added no new code."}},
+  {"name":"MiniMax M3","vendor":"MiniMax","cost":17,"app":7,"code":15.5,"passive":218,"passiveLabel":"3m 38s","active":2100,"activeLabel":"35m","checks":"PPPPFPPPPFFP","mark":true},
+  {"name":"Kimi K2.6","vendor":"Moonshot","cost":22,"app":9,"code":14,"passive":314,"passiveLabel":"5m 14s","active":2100,"activeLabel":"35m","checks":"PPPPFPFPPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","valid":"Does not reuse one regexp for name checks."}},
+  {"name":"Kimi K3","vendor":"Moonshot","cost":20,"app":7,"code":16,"passive":49,"passiveLabel":"49s","active":2100,"activeLabel":"35m","checks":"PPPPFPPFPFFP","mark":true,"why":{"ext":"No extension constant. Files use .sqlite.","dbdir":"A directory constant in db.go is unused by main.go. The directory is still created at boot."}},
+  {"name":"GPT 5.6 Terra","vendor":"OpenAI","cost":8,"app":9,"code":16,"passive":188,"passiveLabel":"3m 8s","active":2100,"activeLabel":"35m","checks":"PPPPPPPHPFFP","mark":true,"why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","struct":"Table exists, and it holds record values as rendered strings."}},
+  {"name":"GPT 5.6 Terra Pro","vendor":"OpenAI","cost":10,"app":10,"code":15.5,"passive":167,"passiveLabel":"2m 47s","active":2100,"activeLabel":"35m","checks":"PPPPPPPHPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","struct":"Summary exists, and it holds record values as rendered strings."}},
+  {"name":"GPT 5.6 Sol","vendor":"OpenAI","cost":22,"app":10,"code":16,"passive":133,"passiveLabel":"2m 13s","active":2100,"activeLabel":"35m","checks":"PPPPPPPFPFFP","mark":true,"why":{"schema":"Embedded, as embed.FS rather than a string or byte slice."}},
+  {"name":"GPT 5.6 Sol Pro","vendor":"OpenAI","cost":28,"app":9,"code":15.5,"passive":118,"passiveLabel":"1m 58s","active":2100,"activeLabel":"35m","checks":"PPPPPPPHPFFP","why":{"struct":"Snapshot exists, and it holds records as rendered strings."}},
+  {"name":"GPT 6 Luna","vendor":"OpenAI","cost":2,"app":7,"code":14.5,"passive":22,"passiveLabel":"22s","active":2100,"activeLabel":"35m","checks":"PHPPFPPFPFFP","mark":true,"why":{"dir":"The directory is fetched only at boot. The notes call that a bug because a database can be unloaded. The written rubric still awards the point when a run does not refetch on every redraw, so this cell is mixed.","schema":"Embedded, as embed.FS rather than a string or byte slice."}},
+  {"name":"GPT 6 Astra","vendor":"OpenAI","cost":85,"app":9,"code":15,"passive":45,"passiveLabel":"45s","active":2100,"activeLabel":"35m","checks":"PPPPFPPHPFFP","mark":true,"costNote":"85 credits in the summary table. The model notes say 82.","why":{"struct":"Snapshot exists, and it holds records as rendered strings."}},
+  {"name":"GPT 6.1 Sol","vendor":"OpenAI","cost":17,"app":8,"code":14.5,"passive":42,"passiveLabel":"42s","active":2100,"activeLabel":"35m","checks":"PPPPPPPHPFFP","why":{"ext":"The constant is for .sqlite, not .db. The notes count that constant as a pro.","struct":"Preview exists, and it holds record values as rendered strings."}},
+  {"name":"Grok 4.7 Fast","vendor":"xAI","cost":null,"app":8,"code":13,"passive":126,"passiveLabel":"2m 6s","active":2100,"activeLabel":"35m","checks":"PPPFFPPFFFFP","why":{"schema":"schema.sql is read from disk. It is not embedded.","builder":"Rendering does not use strings.Builder."}},
+  {"name":"Grok 4.7 Expert","vendor":"xAI","cost":null,"app":9,"code":14.5,"passive":205,"passiveLabel":"3m 25s","active":2100,"activeLabel":"35m","checks":"PPPPFPPPFFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","builder":"Rendering does not use strings.Builder."}},
+  {"name":"MiMo V2.6 Flash","vendor":"Xiaomi","cost":3,"app":9,"code":13,"passive":199,"passiveLabel":"3m 19s","active":2160,"activeLabel":"~36m","checks":"PPPPPPPFPFFF","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","compile":"Two compile errors: Preview is both a type and a function, and main calls ui.New instead of passing it to tea.NewProgram."}},
+  {"name":"MiMo V2.6 Pro","vendor":"Xiaomi","cost":9,"app":9,"code":13,"passive":478,"passiveLabel":"7m 58s","active":2160,"activeLabel":"~36m","checks":"PPPPPPPHPFFF","mark":true,"why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","struct":"Table exists, and it holds record values as rendered strings.","seed":"The seed generator is generic. Every database still gets the same rows, which is the cons line.","compile":"Three build failures: the pinned bubbletea version does not exist, viewer.go does not import lipgloss, and create.go imports textinput unused."}},
+  {"name":"GLM 5.3 Flash","vendor":"Z AI","cost":1,"app":8,"code":13,"passive":11,"passiveLabel":"11s","active":2100,"activeLabel":"35m","checks":"PPFFFPPPFFFP","mark":true,"why":{"rec":"Fetches records again on every redraw.","schema":"Schema is not embedded.","builder":"Rendering does not use strings.Builder."}}
 ]
 </script>
 
@@ -428,6 +433,14 @@ function slug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(
 function pctApp(m) { return m.app / 10 * 100; }
 function pctCode(m) { return m.code / 20 * 100; }
 function combined(m) { return (pctApp(m) + pctCode(m)) / 2; }
+function totalSeconds(m) { return m.active + m.passive; }
+function clock(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  if (m === 0) return s + "s";
+  if (s === 0) return m + "m";
+  return m + "m " + s + "s";
+}
 function fmt(n) {
   const v = Math.round(n * 10) / 10;
   return Number.isInteger(v) ? String(v) : v.toFixed(1);
@@ -451,7 +464,7 @@ function sorted(list) {
     else if (sortKey === "app") d = pctApp(b) - pctApp(a) || pctCode(b) - pctCode(a);
     else if (sortKey === "gap") d = gap(b) - gap(a);
     else if (sortKey === "cost") d = cost(a) - cost(b) || combined(b) - combined(a);
-    else if (sortKey === "time") d = b.passive - a.passive;
+    else if (sortKey === "time") d = totalSeconds(b) - totalSeconds(a);
     else if (sortKey === "value") d = value(b) - value(a);
     else if (sortKey === "combined") d = combined(b) - combined(a);
     else if (sortKey === "name") d = a.name.localeCompare(b.name);
@@ -499,7 +512,9 @@ function modelLines(m) {
     { k: "App", v: m.app + " / 10  (" + fmt(pctApp(m)) + ")" },
     { k: "Code", v: m.code + " / 20  (" + fmt(pctCode(m)) + ")" },
     { k: "Combined", v: fmt(combined(m)) },
-    { k: "Passive", v: m.passiveLabel }
+    { k: "Active", v: m.activeLabel },
+    { k: "Passive", v: m.passiveLabel },
+    { k: "Total", v: clock(totalSeconds(m)) }
   ];
   lines.push({ k: "Credits", v: m.cost == null ? "unknown" : String(m.cost) });
   if (m.cost != null) lines.push({ k: "Pts / credit", v: fmt(combined(m) / m.cost) });
@@ -525,7 +540,7 @@ function renderFilters() {
     ["combined", "Combined"],
     ["cost", "Credits"],
     ["value", "Points per credit"],
-    ["time", "Passive time"]
+    ["time", "Total time"]
   ];
   const sortHost = document.getElementById("sort-buttons");
   for (const [key, label] of sorts) {
@@ -641,8 +656,8 @@ function renderScatter() {
   xlab.textContent = "Credits, log scale";
 
   const list = filtered().filter(m => m.cost != null);
-  const maxT = 825;
-  const radius = m => 5 + 16 * Math.sqrt(m.passive / maxT);
+  const maxT = Math.max(...list.map(totalSeconds), 1);
+  const radius = m => 5 + 16 * Math.sqrt(totalSeconds(m) / maxT);
   const placed = [];
   const overlap = (a, b) => !(a.x + a.w < b.x || b.x + b.w < a.x || a.y + a.h < b.y || b.y + b.h < a.y);
   const dots = list.map(m => ({ m, cx: sx(m.cost), cy: sy(combined(m)), r: radius(m) }));
@@ -758,10 +773,37 @@ function renderValue() {
 }
 
 function renderTime() {
-  const rows = filtered().slice().sort((a, b) => b.passive - a.passive);
-  const max = Math.max(...rows.map(m => m.passive), 1);
-  hbars("timechart", rows, m => m.passive, m => m.passiveLabel + "  ·  combined " + fmt(combined(m)), () => max,
-    "Passive model time, longest at the top.");
+  const rows = filtered().slice().sort((a, b) => totalSeconds(b) - totalSeconds(a));
+  const rowH = 24;
+  const width = 1000;
+  const padT = 8;
+  const plotL = 198;
+  const plotR = 760;
+  const plotW = plotR - plotL;
+  const height = padT + rows.length * rowH + 8;
+  const svg = el("svg", { width, height, viewBox: `0 0 ${width} ${height}`, role: "img" });
+  svg.setAttribute("aria-label", "Total time, longest at the top. Gray is active time and color is passive time.");
+  const max = Math.max(...rows.map(totalSeconds), 1);
+  rows.forEach((m, i) => {
+    const y = padT + i * rowH;
+    el("rect", { x: 8, y: y + 6, width: 10, height: 10, rx: 2, fill: VENDORS[m.vendor] }, svg);
+    const name = el("text", { x: plotL - 16, y: y + 16, "text-anchor": "end", class: "name" }, svg);
+    name.textContent = m.name;
+    const activeW = (m.active / max) * plotW;
+    const passiveW = (m.passive / max) * plotW;
+    const totalW = activeW + passiveW;
+    const activeBar = el("rect", { x: plotL, y: y + 5, width: Math.max(activeW, 1), height: 12, rx: 2, fill: "#C6C3B8" }, svg);
+    const passiveBar = el("rect", { x: plotL + activeW, y: y + 5, width: Math.max(passiveW, 1), height: 12, rx: 2, fill: VENDORS[m.vendor], opacity: 0.9 }, svg);
+    const lab = el("text", { x: plotL + totalW + 8, y: y + 16, class: "gap" }, svg);
+    lab.textContent = clock(totalSeconds(m));
+    const hit = el("rect", { x: 0, y, width, height: rowH, fill: "transparent" }, svg);
+    hover(hit, () => modelLines(m));
+    activeBar.style.pointerEvents = "none";
+    passiveBar.style.pointerEvents = "none";
+    name.style.pointerEvents = "none";
+    lab.style.pointerEvents = "none";
+  });
+  document.getElementById("timechart").replaceChildren(svg);
 }
 
 function renderHeat() {
@@ -840,7 +882,7 @@ function renderTable() {
       fmt(combined(m)),
       m.cost == null ? "—" : String(m.cost),
       m.cost == null ? "—" : fmt(combined(m) / m.cost),
-      m.passiveLabel
+      clock(totalSeconds(m))
     ];
     cells.forEach((text, i) => {
       const td = document.createElement("td");
