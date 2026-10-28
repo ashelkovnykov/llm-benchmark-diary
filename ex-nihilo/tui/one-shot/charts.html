@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One-shot showdown</title>
+<style>
+  :root {
+    color-scheme: light;
+    --ivory: #F4F3EE;
+    --paper: #FFFFFF;
+    --slate: #16171A;
+    --clay: #2F5F8A;
+    --clay-d: #234A6C;
+    --oat: #DDD9CE;
+    --olive: #3C7A62;
+    --bad: #B4453A;
+    --g100: #ECEAE3;
+    --g200: #E2DFD6;
+    --g300: #C6C3B8;
+    --g500: #76746C;
+    --g700: #3A3B3E;
+    --serif: ui-serif, Georgia, "Times New Roman", Times, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+    --mix: #8A5A12;
+    --mix-bg: #F4EBD6;
+    --yes-bg: #E4F0EA;
+    --no-bg: #F6E4E1;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--ivory);
+    color: var(--g700);
+    font-family: var(--sans);
+    font-size: 16.5px;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 48px 32px 140px; }
+  header.mast { margin-bottom: 8px; }
+  .eyebrow {
+    margin: 0 0 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--g500);
+  }
+  .eyebrow::before {
+    content: "";
+    display: inline-block;
+    width: 24px;
+    height: 1.5px;
+    background: var(--clay);
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  h1 {
+    margin: 0 0 16px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(38px, 5.4vw, 62px);
+    letter-spacing: -0.018em;
+    line-height: 1.05;
+    color: var(--slate);
+  }
+  h1 em { font-style: italic; color: var(--clay); }
+  h2 {
+    margin: 0 0 8px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.015em;
+    color: var(--slate);
+  }
+  h3 {
+    margin: 28px 0 8px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--slate);
+  }
+  p { margin: 0 0 12px; }
+  a { color: var(--clay); }
+  a:hover { color: var(--clay-d); }
+  section { scroll-margin-top: 88px; margin-top: 56px; }
+  .lede { max-width: 68ch; }
+  nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 8px; }
+  nav.toc a, button {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    color: var(--slate);
+    background: var(--paper);
+    border: 1.5px solid var(--g300);
+    border-radius: 999px;
+    padding: 7px 14px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  nav.toc a:hover, button:hover { border-color: var(--slate); }
+  button[aria-pressed="true"] {
+    background: var(--slate);
+    color: var(--ivory);
+    border-color: var(--slate);
+  }
+  button:focus-visible, a:focus-visible {
+    outline: 2px solid var(--clay);
+    outline-offset: 2px;
+  }
+  .filters {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: color-mix(in srgb, var(--ivory) 92%, transparent);
+    backdrop-filter: blur(8px);
+    padding: 12px 0;
+    margin: 20px 0 8px;
+    border-bottom: 1.5px solid var(--g300);
+  }
+  .filters .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .filters .lab {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--g500);
+    margin-right: 4px;
+  }
+  .card {
+    background: var(--paper);
+    border: 1.5px solid var(--g300);
+    border-radius: 12px;
+    padding: 18px 18px 12px;
+    margin-top: 14px;
+  }
+  .scroll { overflow-x: auto; }
+  svg text { font-family: var(--sans); }
+  svg .tick { font-family: var(--mono); font-size: 11px; fill: var(--g500); }
+  svg .name { font-size: 12.5px; fill: var(--slate); }
+  svg .gap { font-family: var(--mono); font-size: 11px; fill: var(--g500); }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px 18px; align-items: center; margin: 8px 0 0; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--g700); }
+  .swatch { width: 10px; height: 10px; border-radius: 99px; display: inline-block; }
+  .swatch.app { background: var(--clay); }
+  .swatch.code { background: var(--olive); }
+  .swatch.ctl { background: transparent; border: 1.5px dashed var(--g500); }
+  .note { color: var(--g500); font-size: 14px; max-width: 78ch; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 18px; }
+  .stat {
+    background: var(--paper);
+    border: 1.5px solid var(--g300);
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
+  .stat b { display: block; font-family: var(--serif); font-weight: 500; font-size: 22px; color: var(--slate); line-height: 1.2; }
+  .stat span { display: block; margin-top: 4px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--g500); }
+  .key {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px 18px;
+    margin: 8px 0 12px;
+    font-size: 13px;
+  }
+  .key i { font-style: normal; font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--g500); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1.5px solid var(--g200); white-space: nowrap; }
+  th button {
+    border: 0;
+    background: transparent;
+    border-radius: 6px;
+    padding: 2px 4px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--g500);
+  }
+  th button[aria-pressed="true"] { color: var(--slate); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody tr:hover { background: var(--g100); }
+  .heat { border-collapse: separate; border-spacing: 3px; }
+  .heat th, .heat td { border: 0; padding: 0; }
+  .heat th {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--g500);
+    font-weight: 500;
+    text-align: center;
+    padding-bottom: 4px;
+  }
+  .heat td.who {
+    font-size: 12.5px;
+    padding-right: 8px;
+    white-space: nowrap;
+    color: var(--slate);
+  }
+  .cell {
+    width: 46px;
+    height: 22px;
+    border-radius: 4px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 22px;
+    letter-spacing: 0.02em;
+  }
+  .cell.P { background: var(--yes-bg); color: #1E4D38; }
+  .cell.H { background: var(--mix-bg); color: var(--mix); }
+  .cell.F { background: var(--no-bg); color: #8C2F28; }
+  .cell.Q { background: transparent; color: var(--g500); }
+  .tip {
+    position: fixed;
+    z-index: 30;
+    max-width: 340px;
+    background: var(--slate);
+    color: var(--ivory);
+    padding: 10px 12px;
+    border-radius: 8px;
+    pointer-events: none;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .tip[hidden] { display: none; }
+  .tip p { margin: 0 0 4px; }
+  .tip p:last-child { margin: 0; }
+  .tip .k {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #C6C3B8;
+  }
+  details { margin-top: 28px; }
+  summary { cursor: pointer; color: var(--slate); }
+  footer { margin-top: 48px; color: var(--g500); font-size: 14px; }
+  @media (max-width: 800px) {
+    .wrap { padding: 28px 16px 80px; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .key { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <p class="eyebrow">Ex nihilo / TUI / one-shot</p>
+    <h1>One-shot <em>showdown</em></h1>
+    <nav class="toc" aria-label="Sections">
+      <a href="#paired">Output quality</a>
+      <a href="#cost">Credits</a>
+      <a href="#time">Model time</a>
+      <a href="#checks">Code checks</a>
+      <a href="#table">Table</a>
+    </nav>
+  </header>
+
+  <div class="filters">
+    <div class="row" id="vendor-filters">
+      <span class="lab">Vendor</span>
+    </div>
+  </div>
+
+  <section id="paired">
+    <h2>Output quality</h2>
+    <p>Scores are scaled to 100 (e.g. 8/10 and 16/20 both land on 80). The number on the right is code score minus app score.</p>
+    <div class="row" id="sort-buttons" style="display:flex;flex-wrap:wrap;gap:8px;margin:10px 0">
+      <span class="lab" style="align-self:center">Sort</span>
+    </div>
+    <div class="card">
+      <div class="legend">
+        <span><i class="swatch app"></i> App quality</span>
+        <span><i class="swatch code"></i> Code quality</span>
+        <span><i class="swatch ctl"></i> Human control</span>
+      </div>
+      <div class="scroll" id="dumbbell"></div>
+      <p class="note">Control is not a model, it's a manual implementation that took roughly 10 hours of active work.</p>
+    </div>
+  </section>
+
+  <section id="cost">
+    <h2>What credits bought</h2>
+    <p>Combined quality gives the two rubrics equal weight after scaling: the average of app-as-a-percent and code-as-a-percent. Cost is on a log scale. Bubble area is total time. Grok models are not pictured, as they have no credit figures.</p>
+    <div class="card">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px">
+        <button type="button" id="label-toggle" aria-pressed="false">Label every model</button>
+      </div>
+      <div class="legend" id="vendor-legend"></div>
+      <div class="scroll" id="scatter"></div>
+      <p class="note" id="scatter-note"></p>
+    </div>
+    <h3>Quality per credit</h3>
+    <p>Combined points divided by cost in credits. Higher score means more performance per credit. Keep this in mind, as it's possible for cheap broken output to score higher than expensive clean output.</p>
+    <div class="card"><div class="scroll" id="value"></div></div>
+  </section>
+
+  <section id="time">
+    <h2>How long the models ran</h2>
+    <p>Each bar is total time from the summary table: active time, then passive time. Gray includes the shared 35-minute prompt. A longer gray segment is time spent fixing broken output. Color is how long the model ran.</p>
+    <div class="card">
+      <div class="legend">
+        <span><i class="swatch" style="background:#C6C3B8;border-radius:2px"></i> Active</span>
+        <span>Colored tip is passive, in the vendor color</span>
+      </div>
+      <div class="scroll" id="timechart"></div>
+    </div>
+  </section>
+
+  <section id="checks">
+    <h2>Code-quality checks</h2>
+    <div class="key" id="check-key"></div>
+    <div class="legend">
+      <span><i class="swatch" style="background:#E4F0EA;border-radius:3px"></i> yes</span>
+      <span><i class="swatch" style="background:#F4EBD6;border-radius:3px"></i> mixed</span>
+      <span><i class="swatch" style="background:#F6E4E1;border-radius:3px"></i> no</span>
+      <span><i class="swatch" style="background:transparent;border:1.5px solid var(--g300);border-radius:3px"></i> not mentioned</span>
+    </div>
+    <div class="card scroll" id="heatmap"></div>
+    <p class="note">"Mixed" cells are qualified pros / cons. Hover a cell to see more info.</p>
+  </section>
+
+  <section id="table">
+    <h2>The summary table, sortable</h2>
+    <div class="card scroll">
+      <table id="grid">
+        <thead>
+          <tr>
+            <th><button type="button" data-sort="name">Model</button></th>
+            <th><button type="button" data-sort="vendor">Vendor</button></th>
+            <th class="num"><button type="button" data-sort="app">App</button></th>
+            <th class="num"><button type="button" data-sort="code">Code</button></th>
+            <th class="num"><button type="button" data-sort="combined">Combined</button></th>
+            <th class="num"><button type="button" data-sort="cost">Credits</button></th>
+            <th class="num"><button type="button" data-sort="value">Pts / credit</button></th>
+            <th class="num"><button type="button" data-sort="time">Total</button></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p>Scores, costs, and times are copied from the one-shot table in <code>ex-nihilo/tui/README.md</code>.</p>
+    <p>Code-quality checks are read from <code>ex-nihilo/tui/one-shot/README.md</code>. Grok model's credit costs are unknown due to using the xAI interface.</p>
+  </footer>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script type="application/json" id="models-data">
+[
+  {"name":"Qwen 3.7 Plus","vendor":"Alibaba","cost":5,"app":7,"code":15.5,"passive":130,"passiveLabel":"2m 10s","active":2100,"activeLabel":"35m","checks":"PPPPFPPPPFFP"},
+  {"name":"Qwen 3.7 Max","vendor":"Alibaba","cost":26,"app":9,"code":15,"passive":89,"passiveLabel":"1m 29s","active":2100,"activeLabel":"35m","checks":"PPPPFPPPPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice."}},
+  {"name":"Qwen 3.8 Flash","vendor":"Alibaba","cost":11,"app":8,"code":13.5,"passive":825,"passiveLabel":"13m 45s","active":2100,"activeLabel":"35m","checks":"PPPPFPPHPFFP","mark":true,"why":{"struct":"Preview exists, and it holds record values as rendered strings."}},
+  {"name":"Qwen 3.8 Max","vendor":"Alibaba","cost":15,"app":7,"code":15,"passive":99,"passiveLabel":"1m 39s","active":2100,"activeLabel":"35m","checks":"PPPPFFPPPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","dbdir":"Never creates ./db/. A missing directory becomes a runtime error."}},
+  {"name":"Claude Haiku 4.5","vendor":"Anthropic","cost":12,"app":5,"code":9.5,"passive":12,"passiveLabel":"12s","active":2220,"activeLabel":"~37m","checks":"PPPFFPFFPFFH","mark":true,"why":{"compile":"New-database creation crashes until createInput is a strings.Builder and NewInitialModel initializes it. The notes describe a crash and two required edits, not a compiler log."}},
+  {"name":"Claude Opus 4.8","vendor":"Anthropic","cost":66,"app":8,"code":14,"passive":37,"passiveLabel":"37s","active":2100,"activeLabel":"35m","checks":"PPPPFPPHPFFP","why":{"struct":"Snapshot and Row exist. Row stores each column as a string."}},
+  {"name":"Claude Fable 5.1","vendor":"Anthropic","cost":182,"app":9,"code":15.5,"passive":67,"passiveLabel":"1m 7s","active":2100,"activeLabel":"35m","checks":"PPPPPPPFPFFP","mark":true},
+  {"name":"Claude Haiku 5.5","vendor":"Anthropic","cost":3,"app":9,"code":16,"passive":45,"passiveLabel":"45s","active":2100,"activeLabel":"35m","checks":"PPPPPPPFPFFP","mark":true},
+  {"name":"Claude Sonnet 5.5","vendor":"Anthropic","cost":39,"app":9,"code":15,"passive":43,"passiveLabel":"43s","active":2100,"activeLabel":"35m","checks":"PPPPPPPHPFFP","why":{"struct":"Snapshot exists, and it holds records as rendered strings."}},
+  {"name":"Claude Opus 5.5","vendor":"Anthropic","cost":106,"app":10,"code":16,"passive":81,"passiveLabel":"1m 21s","active":2100,"activeLabel":"35m","checks":"PPPPPPPFPFFP","mark":true,"why":{"seed":"The seed generator is generic. Every database still gets the same rows, which is the cons line."}},
+  {"name":"DeepSeek V4 Pro","vendor":"DeepSeek","cost":8,"app":9,"code":9.5,"passive":192,"passiveLabel":"3m 12s","active":2280,"activeLabel":"~38m","checks":"PPPPFPPFPFFF","mark":true,"why":{"compile":"Does not compile as emitted: unused filepath imports, missing textinput and lipgloss imports, CreateDB's schema argument, and loadCmd's database names."}},
+  {"name":"DeepSeek V4.1 Flash","vendor":"DeepSeek","cost":6,"app":8,"code":14.5,"passive":108,"passiveLabel":"1m 48s","active":2100,"activeLabel":"35m","checks":"PPPPPPPFPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","ext":"The constant is for .sqlite, not .db. The notes count that constant as a pro."}},
+  {"name":"Gemini 3.1 Pro","vendor":"Google","cost":18,"app":8,"code":12.5,"passive":34,"passiveLabel":"34s","active":2100,"activeLabel":"35m","checks":"PPPFFHFPFFFP","why":{"dbdir":"Directory creation is split across the Makefile, main.go, and db.go.","builder":"Rendering does not use strings.Builder."}},
+  {"name":"Gemini 3.8 Flash","vendor":"Google","cost":9,"app":10,"code":15,"passive":25,"passiveLabel":"25s","active":2100,"activeLabel":"35m","checks":"PPPPFPFPPFFP","mark":true,"why":{"valid":"Does not reuse one regexp for name checks."}},
+  {"name":"Gemini 4 Argon","vendor":"Google","cost":20,"app":9,"code":15.5,"passive":44,"passiveLabel":"44s","active":2100,"activeLabel":"35m","checks":"PPPPFPPPPFFP"},
+  {"name":"Muse Spark 1.2","vendor":"Meta","cost":8,"app":4,"code":12,"passive":18,"passiveLabel":"18s","active":2100,"activeLabel":"35m","checks":"PPPFFPPHPFFP","mark":true,"why":{"schema":"Schema stays on disk. schema.sql contains NOT NOT NULL, so a new database fails to initialize.","ext":"Accepts more than one extension, and does not keep one in a constant.","struct":"Stats exists, and it holds record values as rendered strings."}},
+  {"name":"Muse Wonder","vendor":"Meta","cost":38,"app":7,"code":16,"passive":17,"passiveLabel":"17s","active":2100,"activeLabel":"35m","checks":"PPPPPPPFPFFP","why":{"struct":"Rows are rendered straight to a string. There is no record struct."}},
+  {"name":"MiniMax M2.7","vendor":"MiniMax","cost":4,"app":6,"code":6.5,"passive":64,"passiveLabel":"1m 4s","active":3000,"activeLabel":"~50m","checks":"FPPHFPPPFFFF","mark":true,"why":{"sm":"Separate list and view models, plus a two-phase load-then-view in main.go.","schema":"schema.sql is unused. The schema is hardcoded in schema.go.","compile":"Does not compile until duplicated definitions are removed. The notes say that cleanup added no new code."}},
+  {"name":"MiniMax M3","vendor":"MiniMax","cost":17,"app":7,"code":15.5,"passive":218,"passiveLabel":"3m 38s","active":2100,"activeLabel":"35m","checks":"PPPPFPPPPFFP","mark":true},
+  {"name":"Kimi K2.6","vendor":"Moonshot","cost":22,"app":9,"code":14,"passive":314,"passiveLabel":"5m 14s","active":2100,"activeLabel":"35m","checks":"PPPPFPFPPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","valid":"Does not reuse one regexp for name checks."}},
+  {"name":"Kimi K3","vendor":"Moonshot","cost":20,"app":7,"code":16,"passive":49,"passiveLabel":"49s","active":2100,"activeLabel":"35m","checks":"PPPPFPPFPFFP","mark":true,"why":{"ext":"No extension constant. Files use .sqlite.","dbdir":"A directory constant in db.go is unused by main.go. The directory is still created at boot."}},
+  {"name":"Kimi K3.1 Pro","vendor":"Moonshot","cost":26,"app":7,"code":15,"passive":117,"passiveLabel":"1m 57s","active":2100,"activeLabel":"35m","checks":"PPPPFPPHPFFP","why":{"struct":"Snapshot exists, and it holds record values as rendered strings."}},
+  {"name":"GPT 5.6 Terra","vendor":"OpenAI","cost":8,"app":9,"code":16,"passive":188,"passiveLabel":"3m 8s","active":2100,"activeLabel":"35m","checks":"PPPPPPPHPFFP","mark":true,"why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","struct":"Table exists, and it holds record values as rendered strings."}},
+  {"name":"GPT 5.6 Terra Pro","vendor":"OpenAI","cost":10,"app":10,"code":15.5,"passive":167,"passiveLabel":"2m 47s","active":2100,"activeLabel":"35m","checks":"PPPPPPPHPFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","struct":"Summary exists, and it holds record values as rendered strings."}},
+  {"name":"GPT 5.6 Sol","vendor":"OpenAI","cost":22,"app":10,"code":16,"passive":133,"passiveLabel":"2m 13s","active":2100,"activeLabel":"35m","checks":"PPPPPPPFPFFP","mark":true,"why":{"schema":"Embedded, as embed.FS rather than a string or byte slice."}},
+  {"name":"GPT 5.6 Sol Pro","vendor":"OpenAI","cost":28,"app":9,"code":15.5,"passive":118,"passiveLabel":"1m 58s","active":2100,"activeLabel":"35m","checks":"PPPPPPPHPFFP","why":{"struct":"Snapshot exists, and it holds records as rendered strings."}},
+  {"name":"GPT 6 Luna","vendor":"OpenAI","cost":2,"app":7,"code":14.5,"passive":22,"passiveLabel":"22s","active":2100,"activeLabel":"35m","checks":"PHPPFPPFPFFP","mark":true,"why":{"dir":"The directory is fetched only at boot. The notes call that a bug because a database can be unloaded. The written rubric still awards the point when a run does not refetch on every redraw, so this cell is mixed.","schema":"Embedded, as embed.FS rather than a string or byte slice."}},
+  {"name":"GPT 6 Astra","vendor":"OpenAI","cost":85,"app":9,"code":15,"passive":45,"passiveLabel":"45s","active":2100,"activeLabel":"35m","checks":"PPPPFPPHPFFP","mark":true,"costNote":"85 credits in the summary table. The model notes say 82.","why":{"struct":"Snapshot exists, and it holds records as rendered strings."}},
+  {"name":"GPT 6.1 Terra","vendor":"OpenAI","cost":10,"app":8,"code":13.5,"passive":30,"passiveLabel":"30s","active":2100,"activeLabel":"35m","checks":"PPPFFPPHPFFP","why":{"schema":"The schema is not embedded into the code.","struct":"Snapshot exists, and it holds records as rendered strings."}},
+  {"name":"GPT 6.1 Sol","vendor":"OpenAI","cost":17,"app":8,"code":14.5,"passive":42,"passiveLabel":"42s","active":2100,"activeLabel":"35m","checks":"PPPPPPPHPFFP","why":{"ext":"The constant is for .sqlite, not .db. The notes count that constant as a pro.","struct":"Preview exists, and it holds record values as rendered strings."}},
+  {"name":"Grok 4.7 Fast","vendor":"xAI","cost":null,"app":8,"code":13,"passive":126,"passiveLabel":"2m 6s","active":2100,"activeLabel":"35m","checks":"PPPFFPPFFFFP","why":{"schema":"schema.sql is read from disk. It is not embedded.","builder":"Rendering does not use strings.Builder."}},
+  {"name":"Grok 4.7 Expert","vendor":"xAI","cost":null,"app":9,"code":14.5,"passive":205,"passiveLabel":"3m 25s","active":2100,"activeLabel":"35m","checks":"PPPPFPPPFFFP","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","builder":"Rendering does not use strings.Builder."}},
+  {"name":"MiMo V2.6 Flash","vendor":"Xiaomi","cost":3,"app":9,"code":13,"passive":199,"passiveLabel":"3m 19s","active":2160,"activeLabel":"~36m","checks":"PPPPPPPFPFFF","why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","compile":"Two compile errors: Preview is both a type and a function, and main calls ui.New instead of passing it to tea.NewProgram."}},
+  {"name":"MiMo V2.6 Pro","vendor":"Xiaomi","cost":9,"app":9,"code":13,"passive":478,"passiveLabel":"7m 58s","active":2160,"activeLabel":"~36m","checks":"PPPPPPPHPFFF","mark":true,"why":{"schema":"Embedded, as embed.FS rather than a string or byte slice.","struct":"Table exists, and it holds record values as rendered strings.","seed":"The seed generator is generic. Every database still gets the same rows, which is the cons line.","compile":"Three build failures: the pinned bubbletea version does not exist, viewer.go does not import lipgloss, and create.go imports textinput unused."}},
+  {"name":"GLM 5.3 Flash","vendor":"Z AI","cost":1,"app":8,"code":13,"passive":11,"passiveLabel":"11s","active":2100,"activeLabel":"35m","checks":"PPFFFPPPFFFP","mark":true,"why":{"rec":"Fetches records again on every redraw.","schema":"Schema is not embedded.","builder":"Rendering does not use strings.Builder."}}
+]
+</script>
+
+<script>
+const CHECKS = [
+  ["sm", "SM", "State machine", "Screens live in one model, not a graph of tea.Model values."],
+  ["dir", "Dir", "Directory fetch", "The ./db/ listing is not reread on every redraw."],
+  ["rec", "Rows", "Record fetch", "Rows are read when a database is loaded, not on every redraw."],
+  ["schema", "Schema", "Embedded schema", "The schema is compiled into the binary."],
+  ["ext", "Ext", "Extension constant", "The file extension lives in one constant."],
+  ["dbdir", "Mkdir", "Creates ./db/", "The program creates the database directory itself."],
+  ["valid", "Name", "Name check", "One regexp is reused, or names are checked with an ASCII scan."],
+  ["struct", "Struct", "Row struct", "Fetched rows come back as a struct rather than a rendered string."],
+  ["builder", "Build", "strings.Builder", "The TUI is rendered with strings.Builder."],
+  ["seed", "Seed", "Unique seeds", "New databases do not all receive the same dummy rows."],
+  ["tests", "Tests", "Unit tests", "The output includes unit tests."],
+  ["compile", "Runs", "Compiles clean", "The output compiles without hand edits."]
+];
+const VENDORS = {
+  "Alibaba": "#C47B2B",
+  "Anthropic": "#B4453A",
+  "DeepSeek": "#1F7A6A",
+  "Google": "#8A6A12",
+  "Meta": "#6B4C9A",
+  "MiniMax": "#8E3B56",
+  "Moonshot": "#2A6F8F",
+  "OpenAI": "#2F5F8A",
+  "xAI": "#16171A",
+  "Xiaomi": "#B85C38",
+  "Z AI": "#5C6B73"
+};
+const CELL = { P: "yes", H: "mix", F: "no", "?": "—" };
+const MODELS = JSON.parse(document.getElementById("models-data").textContent);
+const CONTROL = { name: "Control (human)", app: 6, code: 14 };
+const SVGNS = "http://www.w3.org/2000/svg";
+
+let vendor = "All";
+let sortKey = "code";
+let labelAll = false;
+
+for (const m of MODELS) {
+  if (!/^[PFH?]{12}$/.test(m.checks)) console.error("bad checks", m.name, m.checks, m.checks.length);
+  m.why = m.why || {};
+}
+
+const tip = document.getElementById("tip");
+
+function slug(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
+function pctApp(m) { return m.app / 10 * 100; }
+function pctCode(m) { return m.code / 20 * 100; }
+function combined(m) { return (pctApp(m) + pctCode(m)) / 2; }
+function totalSeconds(m) { return m.active + m.passive; }
+function clock(sec) {
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  if (m === 0) return s + "s";
+  if (s === 0) return m + "m";
+  return m + "m " + s + "s";
+}
+function fmt(n) {
+  const v = Math.round(n * 10) / 10;
+  return Number.isInteger(v) ? String(v) : v.toFixed(1);
+}
+function el(name, attrs, parent) {
+  const n = document.createElementNS(SVGNS, name);
+  for (const [k, v] of Object.entries(attrs || {})) n.setAttribute(k, String(v));
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function filtered() {
+  return MODELS.filter(m => vendor === "All" || m.vendor === vendor);
+}
+function sorted(list) {
+  const gap = m => pctCode(m) - pctApp(m);
+  const value = m => m.cost == null ? -Infinity : combined(m) / m.cost;
+  const cost = m => m.cost == null ? Infinity : m.cost;
+  return list.slice().sort((a, b) => {
+    let d = 0;
+    if (sortKey === "code") d = pctCode(b) - pctCode(a) || pctApp(b) - pctApp(a);
+    else if (sortKey === "app") d = pctApp(b) - pctApp(a) || pctCode(b) - pctCode(a);
+    else if (sortKey === "gap") d = gap(b) - gap(a);
+    else if (sortKey === "cost") d = cost(a) - cost(b) || combined(b) - combined(a);
+    else if (sortKey === "time") d = totalSeconds(b) - totalSeconds(a);
+    else if (sortKey === "value") d = value(b) - value(a);
+    else if (sortKey === "combined") d = combined(b) - combined(a);
+    else if (sortKey === "name") d = a.name.localeCompare(b.name);
+    else if (sortKey === "vendor") d = a.vendor.localeCompare(b.vendor) || a.name.localeCompare(b.name);
+    return d || a.name.localeCompare(b.name);
+  });
+}
+function hover(node, lines) {
+  const show = (evt) => {
+    tip.replaceChildren();
+    lines().forEach((line, i) => {
+      const p = document.createElement("p");
+      if (i === 0) p.style.fontWeight = "600";
+      if (typeof line === "object") {
+        const k = document.createElement("span");
+        k.className = "k";
+        k.textContent = line.k + " ";
+        p.append(k, line.v);
+      } else p.textContent = line;
+      tip.appendChild(p);
+    });
+    tip.hidden = false;
+    move(evt);
+  };
+  node.addEventListener("mouseenter", show);
+  node.addEventListener("mousemove", move);
+  node.addEventListener("mouseleave", () => { tip.hidden = true; });
+  node.addEventListener("focus", (evt) => show(evt));
+  node.addEventListener("blur", () => { tip.hidden = true; });
+}
+function move(evt) {
+  const pad = 14;
+  const rect = tip.getBoundingClientRect();
+  let x = evt.clientX + pad;
+  let y = evt.clientY + pad;
+  if (x + rect.width > window.innerWidth - 8) x = evt.clientX - rect.width - pad;
+  if (y + rect.height > window.innerHeight - 8) y = evt.clientY - rect.height - pad;
+  tip.style.left = x + "px";
+  tip.style.top = y + "px";
+}
+function modelLines(m) {
+  const lines = [
+    m.name,
+    { k: "Vendor", v: m.vendor },
+    { k: "App", v: m.app + " / 10  (" + fmt(pctApp(m)) + ")" },
+    { k: "Code", v: m.code + " / 20  (" + fmt(pctCode(m)) + ")" },
+    { k: "Combined", v: fmt(combined(m)) },
+    { k: "Active", v: m.activeLabel },
+    { k: "Passive", v: m.passiveLabel },
+    { k: "Total", v: clock(totalSeconds(m)) }
+  ];
+  lines.push({ k: "Credits", v: m.cost == null ? "unknown" : String(m.cost) });
+  if (m.cost != null) lines.push({ k: "Pts / credit", v: fmt(combined(m) / m.cost) });
+  if (m.costNote) lines.push(m.costNote);
+  return lines;
+}
+
+function renderFilters() {
+  const host = document.getElementById("vendor-filters");
+  const names = ["All", ...Object.keys(VENDORS)];
+  for (const name of names) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = name;
+    b.setAttribute("aria-pressed", String(name === vendor));
+    b.addEventListener("click", () => { vendor = name; render(); });
+    host.appendChild(b);
+  }
+  const sorts = [
+    ["code", "Code grade"],
+    ["app", "App grade"],
+    ["gap", "Code minus app"],
+    ["combined", "Combined"],
+    ["cost", "Credits"],
+    ["value", "Points per credit"],
+    ["time", "Total time"]
+  ];
+  const sortHost = document.getElementById("sort-buttons");
+  for (const [key, label] of sorts) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.dataset.sort = key;
+    b.textContent = label;
+    b.addEventListener("click", () => { sortKey = key; render(); });
+    sortHost.appendChild(b);
+  }
+  const legend = document.getElementById("vendor-legend");
+  for (const [name, color] of Object.entries(VENDORS)) {
+    const s = document.createElement("span");
+    const i = document.createElement("i");
+    i.className = "swatch";
+    i.style.background = color;
+    s.append(i, document.createTextNode(name));
+    legend.appendChild(s);
+  }
+  document.getElementById("label-toggle").addEventListener("click", (evt) => {
+    labelAll = !labelAll;
+    evt.currentTarget.setAttribute("aria-pressed", String(labelAll));
+    renderScatter();
+  });
+  document.querySelectorAll("#grid thead button").forEach(b => {
+    b.addEventListener("click", () => { sortKey = b.dataset.sort; render(); });
+  });
+}
+
+function renderDumbbell() {
+  const rows = sorted(filtered());
+  const showControl = vendor === "All";
+  const n = rows.length + (showControl ? 1 : 0);
+  const rowH = 28;
+  const padT = 28;
+  const width = 1000;
+  const height = padT + n * rowH + (showControl ? 10 : 0) + 8;
+  const plotL = 198;
+  const plotR = 900;
+  const svg = el("svg", { width, height, viewBox: `0 0 ${width} ${height}`, role: "img" });
+  svg.setAttribute("aria-label", "App quality and code quality, both scaled to 100, one row per model.");
+  const x = v => plotL + (v / 100) * (plotR - plotL);
+  for (const tick of [0, 25, 50, 75, 100]) {
+    el("line", { x1: x(tick), x2: x(tick), y1: 18, y2: height - 4, stroke: "#E2DFD6", "stroke-width": 1 }, svg);
+    const t = el("text", { x: x(tick), y: 12, "text-anchor": "middle", class: "tick" }, svg);
+    t.textContent = String(tick);
+  }
+  const drawRow = (m, y, hollow) => {
+    const a = pctApp(m);
+    const c = pctCode(m);
+    el("line", { x1: x(Math.min(a, c)), x2: x(Math.max(a, c)), y1: y, y2: y, stroke: "#C6C3B8", "stroke-width": 2 }, svg);
+    const appDot = el("circle", { cx: x(a), cy: y, r: hollow ? 4.5 : 5, fill: hollow ? "#F4F3EE" : "#2F5F8A", stroke: "#2F5F8A", "stroke-width": hollow ? 1.4 : 0, "stroke-dasharray": hollow ? "2 1.5" : "0" }, svg);
+    const codeDot = el("circle", { cx: x(c), cy: y, r: hollow ? 4.5 : 5, fill: hollow ? "#F4F3EE" : "#3C7A62", stroke: "#3C7A62", "stroke-width": hollow ? 1.4 : 0, "stroke-dasharray": hollow ? "2 1.5" : "0" }, svg);
+    if (!hollow) {
+      const sq = el("rect", { x: 8, y: y - 5, width: 10, height: 10, rx: 2, fill: VENDORS[m.vendor] }, svg);
+      sq.style.pointerEvents = "none";
+    }
+    const label = el("text", { x: plotL - 16, y: y + 4, "text-anchor": "end", class: "name" }, svg);
+    label.textContent = m.name;
+    const g = el("text", { x: plotR + 16, y: y + 4, class: "gap" }, svg);
+    const gap = c - a;
+    g.textContent = (gap > 0 ? "+" : "") + fmt(gap);
+    if (!hollow) {
+      const hit = el("rect", { x: 0, y: y - rowH / 2, width, height: rowH, fill: "transparent" }, svg);
+      hit.style.cursor = "pointer";
+      hover(hit, () => modelLines(m));
+      hit.addEventListener("click", () => {
+        const row = document.getElementById("m-" + slug(m.name));
+        if (row) row.scrollIntoView({ block: "center" });
+      });
+    }
+    appDot.style.pointerEvents = "none";
+    codeDot.style.pointerEvents = "none";
+  };
+  rows.forEach((m, i) => drawRow(m, padT + i * rowH + 8, false));
+  if (showControl) drawRow(CONTROL, padT + rows.length * rowH + 16, true);
+  const host = document.getElementById("dumbbell");
+  host.replaceChildren(svg);
+}
+
+function renderScatter() {
+  const width = 1000;
+  const height = 560;
+  const L = 58, R = 18, T = 18, B = 46;
+  const plotW = width - L - R;
+  const plotH = height - T - B;
+  const yMin = 40, yMax = 100;
+  const xMin = Math.log10(0.7), xMax = Math.log10(260);
+  const sx = cost => L + (Math.log10(cost) - xMin) / (xMax - xMin) * plotW;
+  const sy = q => T + (yMax - q) / (yMax - yMin) * plotH;
+  const svg = el("svg", { width, height, viewBox: `0 0 ${width} ${height}`, role: "img" });
+  svg.setAttribute("aria-label", "Combined quality against credit cost. Larger bubbles took longer.");
+  el("rect", { x: L, y: T, width: plotW, height: plotH, fill: "#FBFBFA", stroke: "#E2DFD6" }, svg);
+  for (const tick of [50, 60, 70, 80, 90]) {
+    el("line", { x1: L, x2: L + plotW, y1: sy(tick), y2: sy(tick), stroke: "#E2DFD6" }, svg);
+    const t = el("text", { x: L - 8, y: sy(tick) + 3, "text-anchor": "end", class: "tick" }, svg);
+    t.textContent = String(tick);
+  }
+  for (const tick of [1, 3, 10, 30, 100, 200]) {
+    el("line", { x1: sx(tick), x2: sx(tick), y1: T, y2: T + plotH, stroke: "#E2DFD6" }, svg);
+    const t = el("text", { x: sx(tick), y: T + plotH + 16, "text-anchor": "middle", class: "tick" }, svg);
+    t.textContent = String(tick);
+  }
+  if (vendor === "All") {
+    const y = sy(combined(CONTROL));
+    el("line", { x1: L, x2: L + plotW, y1: y, y2: y, stroke: "#76746C", "stroke-dasharray": "4 4" }, svg);
+    const t = el("text", { x: L + plotW - 4, y: y - 6, "text-anchor": "end", class: "tick" }, svg);
+    t.textContent = "Control 65";
+  }
+  const ylab = el("text", { x: 16, y: T + plotH / 2, "text-anchor": "middle", class: "tick", transform: `rotate(-90 16 ${T + plotH / 2})` }, svg);
+  ylab.textContent = "Combined quality";
+  const xlab = el("text", { x: L + plotW / 2, y: height - 8, "text-anchor": "middle", class: "tick" }, svg);
+  xlab.textContent = "Credits, log scale";
+
+  const list = filtered().filter(m => m.cost != null);
+  const maxT = Math.max(...list.map(totalSeconds), 1);
+  const radius = m => 5 + 16 * Math.sqrt(totalSeconds(m) / maxT);
+  const placed = [];
+  const overlap = (a, b) => !(a.x + a.w < b.x || b.x + b.w < a.x || a.y + a.h < b.y || b.y + b.h < a.y);
+  const dots = list.map(m => ({ m, cx: sx(m.cost), cy: sy(combined(m)), r: radius(m) }));
+  const hitsDot = (box, self) => dots.some(d => {
+    if (d.m === self) return false;
+    const nx = Math.max(box.x, Math.min(d.cx, box.x + box.w));
+    const ny = Math.max(box.y, Math.min(d.cy, box.y + box.h));
+    const dx = d.cx - nx;
+    const dy = d.cy - ny;
+    return dx * dx + dy * dy < (d.r + 3) * (d.r + 3);
+  });
+  const pending = [];
+  dots.forEach(d => {
+    const { m, cx, cy, r } = d;
+    const c = el("circle", {
+      cx, cy, r,
+      fill: VENDORS[m.vendor],
+      stroke: "#ffffff",
+      "stroke-width": 1.25,
+      opacity: 0.92
+    }, svg);
+    c.style.cursor = "pointer";
+    hover(c, () => modelLines(m));
+    c.addEventListener("click", () => {
+      location.hash = "m-" + slug(m.name);
+    });
+    const want = labelAll || m.mark;
+    if (!want) return;
+    const text = m.name.replace("Claude ", "").replace("GPT ", "");
+    const w = text.length * 6.2 + 4;
+    const h = 13;
+    const options = [8, 22, 36].flatMap(gap => ([
+      { x: cx + r + gap, y: cy + 4 },
+      { x: cx - r - w - gap, y: cy + 4 },
+      { x: cx + r + gap, y: cy - 10 },
+      { x: cx - r - w - gap, y: cy - 10 }
+    ]));
+    let chosen = null;
+    for (const o of options) {
+      const box = { x: o.x, y: o.y - 10, w, h };
+      if (box.x < L + 2 || box.x + box.w > L + plotW - 2) continue;
+      if (box.y < T || box.y + box.h > T + plotH) continue;
+      if (placed.some(p => overlap(p, box))) continue;
+      if (hitsDot(box, m)) continue;
+      chosen = box;
+      break;
+    }
+    if (!chosen && m.mark) {
+      const x = Math.min(Math.max(cx + r + 8, L + 2), L + plotW - w - 2);
+      const y = Math.min(Math.max(cy - 10, T), T + plotH - h);
+      chosen = { x, y, w, h };
+    }
+    if (!chosen) return;
+    placed.push(chosen);
+    pending.push({ m, cx, cy, r, text, chosen, w });
+  });
+  pending.forEach(({ cx, cy, r, text, chosen, w }) => {
+    if (Math.hypot((chosen.x + w / 2) - cx, (chosen.y + 4) - cy) > r + 18) {
+      el("line", {
+        x1: cx, y1: cy, x2: chosen.x < cx ? chosen.x + w : chosen.x, y2: chosen.y + 4,
+        stroke: "#76746C", "stroke-width": 0.75
+      }, svg);
+    }
+    const lab = el("text", { x: chosen.x, y: chosen.y + 2, class: "tick" }, svg);
+    lab.style.fill = "#16171A";
+    lab.style.fontSize = "11px";
+    lab.setAttribute("stroke", "#FBFBFA");
+    lab.setAttribute("stroke-width", "3");
+    lab.setAttribute("paint-order", "stroke");
+    lab.textContent = text;
+    lab.style.pointerEvents = "none";
+  });
+
+  const host = document.getElementById("scatter");
+  host.replaceChildren(svg);
+  const missing = filtered().filter(m => m.cost == null);
+}
+
+function hbars(hostId, rows, valueOf, labelOf, maxOf, aria) {
+  const rowH = 24;
+  const width = 1000;
+  const padT = 8;
+  const plotL = 198;
+  const plotR = 760;
+  const height = padT + rows.length * rowH + 8;
+  const svg = el("svg", { width, height, viewBox: `0 0 ${width} ${height}`, role: "img" });
+  svg.setAttribute("aria-label", aria);
+  const max = maxOf(rows);
+  rows.forEach((m, i) => {
+    const y = padT + i * rowH;
+    el("rect", { x: 8, y: y + 6, width: 10, height: 10, rx: 2, fill: VENDORS[m.vendor] }, svg);
+    const name = el("text", { x: plotL - 16, y: y + 16, "text-anchor": "end", class: "name" }, svg);
+    name.textContent = m.name;
+    const v = valueOf(m);
+    const w = max === 0 ? 0 : (v / max) * (plotR - plotL);
+    const bar = el("rect", { x: plotL, y: y + 5, width: Math.max(w, 1), height: 12, rx: 2, fill: VENDORS[m.vendor], opacity: 0.9 }, svg);
+    const lab = el("text", { x: plotL + Math.max(w, 1) + 8, y: y + 16, class: "gap" }, svg);
+    lab.textContent = labelOf(m);
+    const hit = el("rect", { x: 0, y, width, height: rowH, fill: "transparent" }, svg);
+    hover(hit, () => modelLines(m).concat(labelOf(m)));
+    bar.style.pointerEvents = "none";
+  });
+  document.getElementById(hostId).replaceChildren(svg);
+}
+
+function renderValue() {
+  const rows = filtered().filter(m => m.cost != null)
+    .sort((a, b) => (combined(b) / b.cost) - (combined(a) / a.cost));
+  const rate = m => combined(m) / m.cost;
+  const max = Math.max(...rows.map(rate), 0);
+  hbars("value", rows, m => Math.sqrt(rate(m) / max), m => fmt(rate(m)) + " pts/credit", () => 1,
+    "Combined quality points per credit, higher is better. Bar length is square-root scaled.");
+}
+
+function renderTime() {
+  const rows = filtered().slice().sort((a, b) => totalSeconds(b) - totalSeconds(a));
+  const rowH = 24;
+  const width = 1000;
+  const padT = 8;
+  const plotL = 198;
+  const plotR = 760;
+  const plotW = plotR - plotL;
+  const height = padT + rows.length * rowH + 8;
+  const svg = el("svg", { width, height, viewBox: `0 0 ${width} ${height}`, role: "img" });
+  svg.setAttribute("aria-label", "Total time, longest at the top. Gray is active time and color is passive time.");
+  const max = Math.max(...rows.map(totalSeconds), 1);
+  rows.forEach((m, i) => {
+    const y = padT + i * rowH;
+    el("rect", { x: 8, y: y + 6, width: 10, height: 10, rx: 2, fill: VENDORS[m.vendor] }, svg);
+    const name = el("text", { x: plotL - 16, y: y + 16, "text-anchor": "end", class: "name" }, svg);
+    name.textContent = m.name;
+    const activeW = (m.active / max) * plotW;
+    const passiveW = (m.passive / max) * plotW;
+    const totalW = activeW + passiveW;
+    const activeBar = el("rect", { x: plotL, y: y + 5, width: Math.max(activeW, 1), height: 12, rx: 2, fill: "#C6C3B8" }, svg);
+    const passiveBar = el("rect", { x: plotL + activeW, y: y + 5, width: Math.max(passiveW, 1), height: 12, rx: 2, fill: VENDORS[m.vendor], opacity: 0.9 }, svg);
+    const lab = el("text", { x: plotL + totalW + 8, y: y + 16, class: "gap" }, svg);
+    lab.textContent = clock(totalSeconds(m));
+    const hit = el("rect", { x: 0, y, width, height: rowH, fill: "transparent" }, svg);
+    hover(hit, () => modelLines(m));
+    activeBar.style.pointerEvents = "none";
+    passiveBar.style.pointerEvents = "none";
+    name.style.pointerEvents = "none";
+    lab.style.pointerEvents = "none";
+  });
+  document.getElementById("timechart").replaceChildren(svg);
+}
+
+function renderHeat() {
+  const rows = sorted(filtered());
+  const table = document.createElement("table");
+  table.className = "heat";
+  const thead = document.createElement("thead");
+  const hr = document.createElement("tr");
+  const blank = document.createElement("th");
+  blank.textContent = "";
+  hr.appendChild(blank);
+  for (const [, short, full] of CHECKS) {
+    const th = document.createElement("th");
+    th.textContent = short;
+    th.title = full;
+    hr.appendChild(th);
+  }
+  thead.appendChild(hr);
+  table.appendChild(thead);
+  const tb = document.createElement("tbody");
+  for (const m of rows) {
+    const tr = document.createElement("tr");
+    tr.id = "m-" + slug(m.name);
+    const who = document.createElement("td");
+    who.className = "who";
+    const sw = document.createElement("i");
+    sw.className = "swatch";
+    sw.style.background = VENDORS[m.vendor];
+    sw.style.marginRight = "6px";
+    who.append(sw, document.createTextNode(m.name));
+    tr.appendChild(who);
+    CHECKS.forEach(([id, , full], i) => {
+      const ch = m.checks[i];
+      const td = document.createElement("td");
+      const div = document.createElement("div");
+      div.className = "cell " + (ch === "?" ? "Q" : ch);
+      div.textContent = CELL[ch];
+      div.tabIndex = 0;
+      const extra = m.why[id];
+      hover(div, () => {
+        const lines = [m.name + " — " + full, { k: "Read as", v: ch === "P" ? "yes" : ch === "F" ? "no" : ch === "H" ? "mixed" : "not mentioned" }];
+        if (extra) lines.push(extra);
+        else if (ch === "F" && (id === "seed" || id === "tests")) lines.push(id === "seed" ? "The notes say the dummy rows are identical across databases." : "The notes say there are no unit tests.");
+        else if (ch === "F" && id === "ext") lines.push("The notes say there is no constant for the file extension.");
+        return lines;
+      });
+      td.appendChild(div);
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  }
+  table.appendChild(tb);
+  document.getElementById("heatmap").replaceChildren(table);
+
+  const key = document.getElementById("check-key");
+  key.replaceChildren();
+  for (const [, short, full] of CHECKS) {
+    const s = document.createElement("span");
+    const i = document.createElement("i");
+    i.textContent = short;
+    s.append(i, document.createTextNode(" " + full));
+    key.appendChild(s);
+  }
+}
+
+function renderTable() {
+  const tb = document.querySelector("#grid tbody");
+  tb.replaceChildren();
+  for (const m of sorted(filtered())) {
+    const tr = document.createElement("tr");
+    const cells = [
+      m.name,
+      m.vendor,
+      m.app + " / 10",
+      m.code + " / 20",
+      fmt(combined(m)),
+      m.cost == null ? "—" : String(m.cost),
+      m.cost == null ? "—" : fmt(combined(m) / m.cost),
+      clock(totalSeconds(m))
+    ];
+    cells.forEach((text, i) => {
+      const td = document.createElement("td");
+      if (i > 1) td.className = "num";
+      td.textContent = text;
+      tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  }
+  document.querySelectorAll("#grid thead button, #sort-buttons button").forEach(b => {
+    b.setAttribute("aria-pressed", String(b.dataset.sort === sortKey));
+  });
+  document.querySelectorAll("#vendor-filters button").forEach(b => {
+    b.setAttribute("aria-pressed", String(b.textContent === vendor));
+  });
+}
+
+function render() {
+  renderDumbbell();
+  renderScatter();
+  renderValue();
+  renderTime();
+  renderHeat();
+  renderTable();
+}
+
+renderFilters();
+render();
+</script>
+</body>
+</html>
